@@ -54,16 +54,23 @@ public class MapWindow {
 		return Math.min(dimensions.getWidth() / bounds.getWidth(), dimensions.getHeight() / bounds.getHeight());
 	}
 	
-	public void refresh() {
+	public void drawComplete() {
 		graphics.initDraw();
 		
 		graphics.setScale(getScale(graph.getBounds(), dimensions));
 		
-		for(Node node : graph.getNodes()) {
-			graphics.drawNode(node);
+		for(Node n1 : graph.getNodes()) {
+			for(Node n2 : graph.getNodes()) {
+				graphics.drawEdge(n1, n2);
+				for(Node node : graph.getNodes()) {
+					graphics.drawNode(node);
+				}
+				
+				graphics.display();
+			}
 		}
 		
-		graphics.display();
+
 	}
 
 }

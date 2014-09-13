@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.util.Random;
 
 import cosc561.tsp.model.Node;
 
@@ -16,9 +17,13 @@ public class MapGraphics {
 	private Image offScreenBuffer;
 	private Container panel;
 	
+	private Random rand;
+	
 	public MapGraphics(Container panel, double scale) {
 		this.panel = panel;
 		this.scale = scale;
+		
+		rand = new Random();
 	}
 	
 	public void initDraw() {
@@ -58,16 +63,32 @@ public class MapGraphics {
 	}
 
 	public void drawNode(Node node) {
-		int x = (int) (node.x * scale);
-		int y = (int) (node.y * scale);
+		int x = ((int) (node.x * scale));
+		//FIXME: Hardcoded max to invert y axis
+		int y = ((int) ((100-node.y) * scale));
 		
 		g.setColor(Color.BLACK);
-		g.fillOval(x, y, 10, 10);
+		g.fillOval(x, y, 5, 5);
 	}
 
 	public void setScale(double scale) {
-		System.out.println(scale);
 		this.scale = scale;
+	}
+
+	public void drawEdge(Node n1, Node n2) {
+		if (n1.equals(n2)) {
+			return;
+		}
+		
+		int x1 = ((int) (n1.x * scale));
+		//FIXME: Hardcoded max to invert y axis
+		int y1 = ((int) ((100-n1.y) * scale));
+		int x2 = ((int) (n2.x * scale));
+		//FIXME: Hardcoded max to invert y axis
+		int y2 = ((int) ((100-n2.y) * scale));
+		
+		g.setColor(Color.getHSBColor(rand.nextFloat(), 1f, 1f));
+		g.drawLine(x1, y1, x2, y2);
 	}
 	
 }
