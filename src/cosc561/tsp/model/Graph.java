@@ -22,6 +22,12 @@ public class Graph {
 		this.maxX = Math.max(this.maxX, node.x);
 	}
 	
+	public void addNodes(List<Node> nodes) {
+		for(Node node : nodes) {
+			addNode(node);
+		}
+	}
+	
 	public void addNode(int x, int y) {
 		addNode(new Node(x, y));
 	}
