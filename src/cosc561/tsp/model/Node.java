@@ -11,4 +11,13 @@ public class Node {
 		this.y = y;
 	}
 	
+	public boolean equals(Object other) {
+		if (!(other instanceof Node)) {
+			return false;
+		}
+		
+		Node that = (Node)other;
+		return (this.x == that.x && this.y == that.y);
+	}
+	
 }
