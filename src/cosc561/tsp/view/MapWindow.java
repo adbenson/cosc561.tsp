@@ -9,6 +9,7 @@ import java.awt.Graphics2D;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import cosc561.tsp.model.Branch;
 import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.Node;
 
@@ -17,7 +18,6 @@ public class MapWindow {
 	public static final Color BACKGROUND = Color.WHITE;
 	
 	private Dimension dimensions;
-	private Graph graph;
 	
 	private Container pane;
 	private MapGraphics graphics;
@@ -40,37 +40,46 @@ public class MapWindow {
 		window.pack();
 		window.setVisible(true);
 		
-		graphics = new MapGraphics(pane, getScale(pane.getSize(), dimensions));
+		graphics = new MapGraphics(pane, 5);
 		
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setVisible(true);
 	}
-
-	public void setGraph(Graph graph) {
-		this.graph = graph;
-	}
-
-	private static double getScale(Dimension bounds, Dimension dimensions) {
-		return Math.min(dimensions.getWidth() / bounds.getWidth(), dimensions.getHeight() / bounds.getHeight());
-	}
 	
-	public void drawComplete() {
+	public void drawComplete(Graph graph) {
 		graphics.initDraw();
-		
-		graphics.setScale(getScale(graph.getBounds(), dimensions));
-		
-		for(Node n1 : graph.getNodes()) {
-			for(Node n2 : graph.getNodes()) {
+				
+		for(Node n1 : graph.getNodeList()) {
+			for(Node n2 : graph.getNodeList()) {
 				graphics.drawEdge(n1, n2);
-				for(Node node : graph.getNodes()) {
-					graphics.drawNode(node);
-				}
+				drawNodes(graph.getNodes());
 				
 				graphics.display();
 			}
 		}
-		
+	}
+	
+	private void drawNodes(Iterable<Node> nodes) {
+		for(Node node : nodes) {
+			graphics.drawNode(node);
+		}
+	}
 
+	public void render(Branch branch) {
+		graphics.initDraw();
+		
+		Node prev = null;
+		for (Node next : branch.getPath()) {
+			if (prev != null) {
+				graphics.drawEdge(prev, next);
+			}
+			prev = next;
+		}
+		
+		drawNodes(branch.getPath());
+		drawNodes(branch.getUnvisited());
+		
+		graphics.display();
 	}
 
 }

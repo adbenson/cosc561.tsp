@@ -71,10 +71,6 @@ public class MapGraphics {
 		g.fillOval(x, y, 5, 5);
 	}
 
-	public void setScale(double scale) {
-		this.scale = scale;
-	}
-
 	public void drawEdge(Node n1, Node n2) {
 		if (n1.equals(n2)) {
 			return;
