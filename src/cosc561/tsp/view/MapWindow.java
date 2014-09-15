@@ -1,13 +1,21 @@
 package cosc561.tsp.view;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.event.ItemListener;
 
+import javax.swing.Action;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.JToggleButton;
+import javax.swing.border.EtchedBorder;
 
 import cosc561.tsp.model.Branch;
 import cosc561.tsp.model.Graph;
@@ -17,10 +25,17 @@ public class MapWindow {
 	
 	public static final Color BACKGROUND = Color.WHITE;
 	
+	public static final int OUTPUT_WIDTH = 300;
+	
 	private Dimension dimensions;
 	
-	private Container pane;
+	private Container graphPanel;
 	private MapGraphics graphics;
+	
+	private JPanel outputPanel;
+	
+	private JToggleButton pause;
+	private JButton next;
 	
 	public MapWindow(int width, int height) {
 		this(new Dimension(width, height));
@@ -32,20 +47,64 @@ public class MapWindow {
 		JFrame window = new JFrame();
 		window.setSize(dimensions);
 		
+		Container content = window.getContentPane();
+		content.setLayout(new BorderLayout());
 		
-		pane = new JPanel();
-		pane.setPreferredSize(dimensions);
-		window.add(pane);
+		graphPanel = new JPanel();
+		graphPanel.setPreferredSize(dimensions);
+		content.add(graphPanel, BorderLayout.CENTER);
 		
+		JPanel controlPanel = createControlPanel();		
+		content.add(controlPanel, BorderLayout.SOUTH);
+		
+		outputPanel = createOutputPanel();
+		content.add(outputPanel, BorderLayout.EAST);
+				
 		window.pack();
 		window.setVisible(true);
 		
-		graphics = new MapGraphics(pane, 5);
+		graphics = new MapGraphics(graphPanel, 7);
 		
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setVisible(true);
 	}
+
+	private JPanel createOutputPanel() {
+		JPanel outputPanel = new JPanel();
+		outputPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+		outputPanel.setPreferredSize(new Dimension(OUTPUT_WIDTH, 0));
+		outputPanel.setLayout(new BoxLayout(outputPanel, BoxLayout.PAGE_AXIS));
+		
+		return outputPanel;
+	}
+
+	private JPanel createControlPanel() {
+		JPanel controlPanel = new JPanel();
+		controlPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+		
+		pause = new JToggleButton("Pause");
+		controlPanel.add(pause);
+		pause.setSelected(true);
+		
+		next = new JButton("Next");
+		controlPanel.add(next);
+		
+		return controlPanel;
+	}
 	
+	public void addOutput(Output output) {
+		outputPanel.add(new JLabel(output.label));
+		outputPanel.add(output.getField());
+	}
+	
+	public void setPauseHandler(ItemListener listener) {
+		pause.addItemListener(listener);
+	}
+	
+	public void setNextHandler(Action listener) {
+		next.setAction(listener);
+	}
+
 	public void drawComplete(Graph graph) {
 		graphics.initDraw();
 				
@@ -83,3 +142,5 @@ public class MapWindow {
 	}
 
 }
+
+

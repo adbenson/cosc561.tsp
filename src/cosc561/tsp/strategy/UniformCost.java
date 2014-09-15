@@ -34,4 +34,9 @@ public class UniformCost extends Strategy {
 		
 		return current;
 	}
+
+	@Override
+	public boolean isComplete() {
+		return current.isComplete();
+	}
 }

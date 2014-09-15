@@ -15,4 +15,6 @@ public abstract class Strategy {
 
 	protected abstract void init();
 
+	public abstract boolean isComplete();
+
 }

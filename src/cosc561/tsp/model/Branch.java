@@ -42,7 +42,7 @@ public class Branch implements Comparable<Branch> {
 
 	@Override
 	public int compareTo(Branch that) {
-		return that.weight - this.weight;
+		return this.weight - that.weight;
 	}
 	
 	public boolean isComplete() {
@@ -55,5 +55,9 @@ public class Branch implements Comparable<Branch> {
 	
 	public List<Node> getPath() {
 		return path;
+	}
+
+	public Node getHead() {
+		return head;
 	}
 }

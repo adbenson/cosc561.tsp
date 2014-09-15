@@ -11,6 +11,8 @@ public class Solver implements Runnable {
 	
 	private boolean paused;
 	
+	private int attempts;
+	
 	public Solver(MapWindow window) {
 		this.window = window;
 		paused = true;
@@ -18,14 +20,14 @@ public class Solver implements Runnable {
 	
 	public void start(Strategy strategy) {
 		this.strategy = strategy;
+		attempts = 0;
 		strategy.init();
 	}
 	
 	public void next() {
-//		if (!strategy.isComplete()) {
-			Branch branch = strategy.next();
-			window.render(branch);
-//		}
+		Branch branch = strategy.next();
+		attempts++;
+		window.render(branch);
 	}
 	
 	public void run() {
@@ -34,11 +36,7 @@ public class Solver implements Runnable {
 		}
 	}
 	
-	public void setIncrement(int increment) {
-		
-	}
-	
-	public void setPause(boolean pause) {
-		
+	public int getAttempts() {
+		return attempts;
 	}
 }
