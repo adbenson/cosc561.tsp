@@ -83,7 +83,7 @@ public class MapGraphics {
 		//FIXME: Hardcoded max to invert y axis
 		int y2 = ((int) ((100-n2.y) * scale));
 		
-		g.setColor(Color.getHSBColor(rand.nextFloat(), 1f, 1f));
+		g.setColor(Color.getHSBColor(rand.nextFloat(), 1f, 0.75f));
 		g.drawLine(x1, y1, x2, y2);
 	}
 	

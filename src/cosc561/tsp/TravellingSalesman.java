@@ -13,9 +13,9 @@ import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.Node;
 import cosc561.tsp.model.NodeParser;
 import cosc561.tsp.model.NodeParser.NodeParseException;
+import cosc561.tsp.strategy.ClassHeuristic;
 import cosc561.tsp.strategy.Solver;
 import cosc561.tsp.strategy.Strategy;
-import cosc561.tsp.strategy.UniformCost;
 import cosc561.tsp.view.MapWindow;
 import cosc561.tsp.view.Output;
 
@@ -38,11 +38,11 @@ public class TravellingSalesman {
 		Graph graph = new Graph();		
 		List<Node> nodes = NodeParser.parse("TSPDataComma.txt");
 		
-		graph.addNodes(nodes, 7);
+		graph.addNodes(nodes, 4);
 		
 		solver = new Solver(window);
 		
-		Strategy strategy = new UniformCost(graph);
+		Strategy strategy = new ClassHeuristic(graph, window);
 		
 		attempts = new Output("Attempted Paths");
 		window.addOutput(attempts);

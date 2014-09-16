@@ -63,7 +63,7 @@ public class MapWindow {
 		window.pack();
 		window.setVisible(true);
 		
-		graphics = new MapGraphics(graphPanel, 7);
+		graphics = new MapGraphics(graphPanel, 2);
 		
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setVisible(true);
@@ -93,7 +93,7 @@ public class MapWindow {
 	}
 	
 	public void addOutput(Output output) {
-		outputPanel.add(new JLabel(output.label));
+		outputPanel.add(new JLabel(output.getLabel()));
 		outputPanel.add(output.getField());
 	}
 	

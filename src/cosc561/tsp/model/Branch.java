@@ -7,37 +7,43 @@ import java.util.Set;
 
 public class Branch implements Comparable<Branch> {
 	
-	final List<Node> path;
+	List<Node> path;
+	List<Edge> edges;
 	
-	final HashSet<Node> unvisited;
+	HashSet<Node> unvisited;
+		
+	Node start;
+	Node end;
 	
-	final int weight;
-	
-	final Node head;
+	int weight;
 	
 	public Branch(Node node, Set<Node> unvisited) {
 		this.path = new ArrayList<>();
-		this.unvisited = new HashSet<>(unvisited);
-		
-		this.head = node;
-		this.weight = 0;
-				
-		visit(node);
-	}
-
-	public Branch(Branch branch, Node node) {
-		this.path = new ArrayList<>(branch.path);
-		this.unvisited = new HashSet<>(branch.unvisited);
-
-		this.head = node;
-		this.weight = branch.weight + branch.head.distance(node);;
-
-		this.visit(node);
-	}
-	
-	public void visit(Node node) {
 		this.path.add(node);
+		
+		this.edges = new ArrayList<>();
+		
+		this.unvisited = new HashSet<>(unvisited);
 		this.unvisited.remove(node);
+		
+		this.start = node;
+		this.end = node;
+		this.weight = 0;
+	}
+
+	public Branch(Branch that, Node node) {
+		this.path = new ArrayList<>(that.path);
+		this.path.add(node);
+		
+		this.edges = new ArrayList<>(that.edges);
+		this.edges.add(new Edge(that.end, node));
+				
+		this.unvisited = new HashSet<>(that.unvisited);
+		this.unvisited.remove(node);
+		
+		this.start = that.start;
+		this.end = node;
+		this.weight = that.weight + that.end.distance(node);
 	}
 
 	@Override
@@ -56,8 +62,16 @@ public class Branch implements Comparable<Branch> {
 	public List<Node> getPath() {
 		return path;
 	}
+	
+	public List<Edge> getEdges() {
+		return edges;
+	}
+	
+	public Node getStart() {
+		return start;
+	}
 
-	public Node getHead() {
-		return head;
+	public Node getEnd() {
+		return end;
 	}
 }
