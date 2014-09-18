@@ -42,7 +42,7 @@ public class Node {
 		Node nearest = null;
 		
 		for (Node node : nodes) {
-			if (nearest == null || distances.get(nearest) < distances.get(node)) {
+			if (nearest == null || distance(nearest) < distance(node)) {
 				nearest = node;
 			}
 		}
