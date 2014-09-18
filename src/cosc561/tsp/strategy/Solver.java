@@ -24,10 +24,9 @@ public class Solver implements Runnable {
 		strategy.init();
 	}
 	
-	public void next() {
-		Branch branch = strategy.next();
+	public Branch next() {
 		attempts++;
-		window.render(branch);
+		return strategy.next();
 	}
 	
 	public void run() {

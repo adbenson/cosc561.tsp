@@ -2,21 +2,22 @@ package cosc561.tsp.view;
 
 import java.awt.Component;
 
-import javax.swing.JTextField;
+import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 
 public class Output {
 	
 	private final String label;
-	private final JTextField field;
+	private final JLabel field;
 	
 	private int value;
 	
 	public Output(String label) {
 		this.label = label;
-		this.field = new JTextField();
+		this.field = new JLabel("", JLabel.RIGHT);
 		
 //		field.setMaximumSize());
-		field.setEditable(false);
+//		field.setEditable(false);
 		
 		value = 0;
 	}
@@ -40,7 +41,11 @@ public class Output {
 	}
 	
 	public void setValue(String value) {
-		field.setText(value);
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				field.setText(value);
+			}
+		});
 	}
 	
 

@@ -4,19 +4,19 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.event.ItemListener;
+import java.awt.GridLayout;
+import java.lang.reflect.InvocationTargetException;
 
-import javax.swing.Action;
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.border.EtchedBorder;
 
+import cosc561.tsp.Controls;
 import cosc561.tsp.model.Branch;
 import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.Node;
@@ -34,6 +34,7 @@ public class MapWindow {
 	
 	private JPanel outputPanel;
 	
+	private JCheckBox render;
 	private JToggleButton pause;
 	private JButton next;
 	
@@ -73,7 +74,8 @@ public class MapWindow {
 		JPanel outputPanel = new JPanel();
 		outputPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
 		outputPanel.setPreferredSize(new Dimension(OUTPUT_WIDTH, 0));
-		outputPanel.setLayout(new BoxLayout(outputPanel, BoxLayout.PAGE_AXIS));
+		outputPanel.setLayout(new GridLayout(0, 2));
+//		outputPanel.setLayout(new BoxLayout(outputPanel, BoxLayout.PAGE_AXIS));
 		
 		return outputPanel;
 	}
@@ -82,27 +84,26 @@ public class MapWindow {
 		JPanel controlPanel = new JPanel();
 		controlPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
 		
+		render = new JCheckBox("Render");
+		controlPanel.add(render);
+		render.setSelected(true);
+
+		
 		pause = new JToggleButton("Pause");
 		controlPanel.add(pause);
 		pause.setSelected(true);
+
 		
 		next = new JButton("Next");
 		controlPanel.add(next);
+
 		
 		return controlPanel;
 	}
 	
 	public void addOutput(Output output) {
-		outputPanel.add(new JLabel(output.getLabel()));
+		outputPanel.add(new JLabel(output.getLabel() + ":"));
 		outputPanel.add(output.getField());
-	}
-	
-	public void setPauseHandler(ItemListener listener) {
-		pause.addItemListener(listener);
-	}
-	
-	public void setNextHandler(Action listener) {
-		next.setAction(listener);
 	}
 
 	public void drawComplete(Graph graph) {
@@ -139,6 +140,12 @@ public class MapWindow {
 		drawNodes(branch.getUnvisited());
 		
 		graphics.display();
+	}
+
+	public void setControls(Controls controls) {
+		render.addItemListener(controls.renderToggle());
+		pause.addItemListener(controls.pauseToggle());
+		next.setAction(controls.nextButton());
 	}
 
 }
