@@ -64,7 +64,7 @@ public class MapWindow {
 		window.pack();
 		window.setVisible(true);
 		
-		graphics = new MapGraphics(graphPanel, 2);
+		graphics = new MapGraphics(graphPanel, 7);
 		
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setVisible(true);
