@@ -9,7 +9,7 @@ import cosc561.tsp.model.Branch;
 import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.Node;
 import cosc561.tsp.model.NodeParser;
-import cosc561.tsp.strategy.ClassHeuristic;
+import cosc561.tsp.strategy.*;
 import cosc561.tsp.strategy.Solver;
 import cosc561.tsp.strategy.Strategy;
 import cosc561.tsp.view.MapWindow;
