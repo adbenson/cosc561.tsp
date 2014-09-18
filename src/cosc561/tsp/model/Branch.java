@@ -74,4 +74,8 @@ public class Branch implements Comparable<Branch> {
 	public Node getEnd() {
 		return end;
 	}
+
+	public int getWeight() {
+		return weight;
+	}
 }

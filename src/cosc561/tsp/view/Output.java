@@ -47,6 +47,10 @@ public class Output {
 			}
 		});
 	}
+
+	public int getIntValue() {
+		return this.value;
+	}
 	
 
 }

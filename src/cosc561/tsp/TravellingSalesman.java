@@ -25,8 +25,6 @@ public class TravellingSalesman extends Controls {
 	private Solver solver;
 	private Strategy strategy;
 	
-	private Output attempts;
-	
 	private MapWindow window;
 	
 	private Branch currentBranch;
@@ -53,9 +51,6 @@ public class TravellingSalesman extends Controls {
 		
 		strategy = new ClassHeuristic(graph, window);
 		
-		attempts = new Output("Attempted Paths");
-		window.addOutput(attempts);
-		
 		solver.start(strategy);
 		
 		paused = true;
@@ -77,7 +72,6 @@ public class TravellingSalesman extends Controls {
 			if (render) {
 				window.render(currentBranch);
 			}
-			attempts.setValue(solver.getAttempts());
 		}
 	}
 
