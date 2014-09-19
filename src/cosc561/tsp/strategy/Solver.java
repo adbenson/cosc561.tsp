@@ -12,40 +12,70 @@ public class Solver implements Runnable {
 	
 	private boolean paused;
 	
-	private Output attempts;
-	private Output currentDistance;
-	private Output bestDistance;
+	private Stats stats;
+	
+	protected volatile long attempts;
+	protected volatile int bestDistance;
+	protected volatile int currentDistance;
 	
 	public Solver(MapWindow window) {
 		this.window = window;
 		paused = true;
-		attempts = new Output("Attempted Paths", 200);
-		window.addOutput(attempts);
-		bestDistance = new Output("Best Distance");
-		window.addOutput(bestDistance);
-		currentDistance = new Output("Current Distance");
-		window.addOutput(currentDistance);
+		
+		stats = new Stats(window);
 	}
 	
 	public void start(Strategy strategy) {
 		this.strategy = strategy;
-		attempts.setValue(0);
-		bestDistance.setValue(Integer.MAX_VALUE);
-		currentDistance.setValue(0);
+		
 		strategy.init();
 	}
 	
-	public Branch next() {
-		attempts.increment();
+	public Branch next() {		
 		Branch next = strategy.next();
-		bestDistance.setValue(Math.min(bestDistance.getLongValue(), next.getWeight()));
-		currentDistance.setValue(next.getWeight());
+		
+		attempts++;
+		bestDistance = Math.min(bestDistance, next.getWeight());
+		currentDistance = next.getWeight();
+		
+		stats.run();
+		
 		return next;
 	}
 	
 	public void run() {
 		while(!paused) {
 			
+		}
+	}
+	
+	private class Stats implements Runnable {
+		private Output attemptsOutput;
+		private Output currentDistanceOutput;
+		private Output bestDistanceOutput;
+		
+		public Stats(MapWindow window) {
+			
+			attemptsOutput = new Output("Attempted Paths");
+			window.addOutput(attemptsOutput);
+			
+			bestDistanceOutput = new Output("Best Distance");
+			window.addOutput(bestDistanceOutput);
+			
+			currentDistanceOutput = new Output("Current Distance");
+			window.addOutput(currentDistanceOutput);
+		}
+		
+		public void reset() {
+			attemptsOutput.setValue(0);
+			bestDistanceOutput.setValue(Integer.MAX_VALUE);
+			currentDistanceOutput.setValue(0);
+		}
+		
+		public void run() {
+			attemptsOutput.setValue(attempts);
+			bestDistanceOutput.setValue(bestDistance);
+			currentDistanceOutput.setValue(currentDistance);
 		}
 	}
 }
