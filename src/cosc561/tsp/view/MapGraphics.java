@@ -1,5 +1,6 @@
 package cosc561.tsp.view;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Graphics;
@@ -75,6 +76,8 @@ public class MapGraphics {
 		if (n1.equals(n2)) {
 			return;
 		}
+		
+		g.setStroke(new BasicStroke(2));
 		
 		int x1 = ((int) (n1.x * scale));
 		//FIXME: Hardcoded max to invert y axis
