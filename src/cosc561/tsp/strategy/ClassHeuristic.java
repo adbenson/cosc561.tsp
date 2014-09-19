@@ -45,6 +45,9 @@ public class ClassHeuristic extends Strategy {
 		}
 	
 		current = branches.poll();
+		if (current == null) {
+			System.err.println("branches empty");
+		}
 		
 		return current;
 	}

@@ -17,8 +17,6 @@ public class Node {
 		this.y = y;
 		
 		distances = new HashMap<>();
-		//Arguably, I should be setting the initial capacity variably,
-		// but that would be really awkward, and initial capacity isn't that important.
 	}
 	
 	public boolean equals(Object other) {
@@ -54,6 +52,7 @@ public class Node {
 		return Math.sqrt(Math.pow((this.x - that.x), 2) + Math.pow((this.y - that.y), 2));
 	}
 	
+	@SuppressWarnings("unused")
 	private class DistanceComparator implements Comparator<Node> {
 
 		@Override

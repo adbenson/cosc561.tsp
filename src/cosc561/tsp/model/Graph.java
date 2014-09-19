@@ -34,10 +34,6 @@ public class Graph {
 		}
 	}
 	
-	public void addNode(int x, int y) {
-		addNode(new Node(x, y));
-	}
-	
 	public Set<Node> getNodes() {
 		return new HashSet<>(nodes);
 	}
