@@ -1,6 +1,7 @@
 package cosc561.tsp.view;
 
 import java.awt.Component;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
@@ -41,11 +42,16 @@ public class Output {
 	}
 	
 	public void setValue(String value) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				field.setText(value);
-			}
-		});
+		try {
+			SwingUtilities.invokeAndWait(new Runnable() {
+				public void run() {
+					field.setText(value);
+				}
+			});
+		} catch (InvocationTargetException | InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public int getIntValue() {

@@ -11,13 +11,17 @@ public class Edge {
 	}
 
 	public boolean intersects(Edge that) {
-		if (this.sharesNode(that)) {
-			return false;
-		}
-		
-		if (boundsIntersect(that)) {
+		if (Geometry.doLinesIntersect(this, that)) {
 			return true;
 		}
+		
+//		if (this.sharesNode(that)) {
+//			return false;
+//		}
+//		
+//		if (boundsIntersect(that)) {
+//			return true;
+//		}
 		
 		
 		return false;

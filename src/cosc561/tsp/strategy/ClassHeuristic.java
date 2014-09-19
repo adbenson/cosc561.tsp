@@ -40,6 +40,7 @@ public class ClassHeuristic extends Strategy {
 			}
 			else {
 				rejected.increment();
+				Thread.yield();
 			}
 		}
 	
