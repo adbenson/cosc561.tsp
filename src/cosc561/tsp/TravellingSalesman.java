@@ -9,15 +9,16 @@ import cosc561.tsp.model.Branch;
 import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.Node;
 import cosc561.tsp.model.NodeParser;
-import cosc561.tsp.strategy.*;
+import cosc561.tsp.strategy.ClassHeuristic;
 import cosc561.tsp.strategy.Solver;
 import cosc561.tsp.strategy.Strategy;
 import cosc561.tsp.view.MapWindow;
-import cosc561.tsp.view.Output;
 
 public class TravellingSalesman extends Controls {
 	
-	public static final Dimension DIMENSIONS = new Dimension(800, 800);
+	public static final int DIMENSION = 700;
+	public static final int MAX_COORDS = 100;
+	public static final int SCALE = DIMENSION/MAX_COORDS;
 	
 	private volatile boolean paused;
 	private volatile boolean render;
@@ -36,7 +37,7 @@ public class TravellingSalesman extends Controls {
 	public TravellingSalesman() throws Exception {
 		SwingUtilities.invokeAndWait(new Runnable() {
 			public void run() {
-				window = new MapWindow(DIMENSIONS);
+				window = new MapWindow(new Dimension(DIMENSION, DIMENSION));
 			};
 		});
 		

@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -17,6 +16,7 @@ import javax.swing.JToggleButton;
 import javax.swing.border.EtchedBorder;
 
 import cosc561.tsp.Controls;
+import cosc561.tsp.TravellingSalesman;
 import cosc561.tsp.model.Branch;
 import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.Node;
@@ -64,7 +64,7 @@ public class MapWindow {
 		window.pack();
 		window.setVisible(true);
 		
-		graphics = new MapGraphics(graphPanel, 7);
+		graphics = new MapGraphics(graphPanel, TravellingSalesman.SCALE);
 		
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setVisible(true);

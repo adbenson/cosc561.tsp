@@ -9,6 +9,7 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.util.Random;
 
+import cosc561.tsp.TravellingSalesman;
 import cosc561.tsp.model.Node;
 
 public class MapGraphics {
@@ -65,8 +66,7 @@ public class MapGraphics {
 
 	public void drawNode(Node node) {
 		int x = ((int) (node.x * scale));
-		//FIXME: Hardcoded max to invert y axis
-		int y = ((int) ((100-node.y) * scale));
+		int y = ((int) ((TravellingSalesman.MAX_COORDS-node.y) * scale));
 		
 		g.setColor(Color.BLACK);
 		g.fillOval(x, y, 5, 5);
@@ -80,11 +80,9 @@ public class MapGraphics {
 		g.setStroke(new BasicStroke(2));
 		
 		int x1 = ((int) (n1.x * scale));
-		//FIXME: Hardcoded max to invert y axis
-		int y1 = ((int) ((100-n1.y) * scale));
+		int y1 = ((int) ((TravellingSalesman.MAX_COORDS-n1.y) * scale));
 		int x2 = ((int) (n2.x * scale));
-		//FIXME: Hardcoded max to invert y axis
-		int y2 = ((int) ((100-n2.y) * scale));
+		int y2 = ((int) ((TravellingSalesman.MAX_COORDS-n2.y) * scale));
 		
 		g.setColor(Color.getHSBColor(rand.nextFloat(), 1f, 0.75f));
 		g.drawLine(x1, y1, x2, y2);
