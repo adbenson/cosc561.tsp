@@ -65,16 +65,8 @@ public class Node {
 		}
 		
 	}
-//	
-//	public boolean intersects(Node a1, Node a2, Node b1, Node b2) {
-//		
-//	}
 	
-	public static boolean intersect(Node a1, Node a2, Node b1, Node b2) {
-	    return a1.x <= b2.x 
-	        && a2.x >= b1.x 
-	        && a1.y <= b2.y
-	        && a2.y >= b1.y;
+	public String toString() {
+		return "("+x+", "+y+")";
 	}
-	
 }

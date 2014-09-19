@@ -1,5 +1,7 @@
 package cosc561.tsp.model;
 
+import java.awt.geom.Line2D;
+
 public class Edge {
 	
 	public final Node start;
@@ -11,35 +13,28 @@ public class Edge {
 	}
 
 	public boolean intersects(Edge that) {
-		if (Geometry.doLinesIntersect(this, that)) {
-			return true;
-		}
 		
-//		if (this.sharesNode(that)) {
-//			return false;
-//		}
-//		
-//		if (boundsIntersect(that)) {
-//			return true;
-//		}
+		//Two segments sharing an endpoint arguably do intersect, 
+		//but not for our purposes
+		if (this.sharesNode(that)) {
+			return false;
+		}	
 		
-		
-		return false;
+		// Ax1,Ay1,  Ax2,Ay2,  Bx1,By1,  Bx2,By2
+		return Line2D.linesIntersect(
+				this.start.x, this.start.y, this.end.x, this.end.y,
+				that.start.x, that.start.y, that.end.x, that.end.y);
 	}
 	
 	private boolean sharesNode(Edge that) {
 		return this.start.equals(that.start) || 
-				this.end.equals(that.end) || 
 				this.start.equals(that.end) || 
-				this.end.equals(that.start);
+				this.end.equals(that.start) || 
+				this.end.equals(that.end);
 	}
-
-	public boolean boundsIntersect(Edge that) {
-		return this.start.x <= that.end.x 
-		        && this.end.x >= that.start.x 
-		        && this.start.y <= that.end.y
-		        && this.end.y >= that.start.y;
-		
+	
+	public String toString() {
+		return "["+start+" -> "+end+"]";
 	}
 
 }
