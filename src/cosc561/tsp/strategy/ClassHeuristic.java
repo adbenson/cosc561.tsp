@@ -19,7 +19,7 @@ public class ClassHeuristic extends Strategy {
 	public ClassHeuristic(Graph graph, MapWindow window) {
 		super(graph, window);
 		
-		rejected = new Output("Rejected candidates");
+		rejected = new Output("Rejected candidates", 500);
 		window.addOutput(rejected);
 	}
 	

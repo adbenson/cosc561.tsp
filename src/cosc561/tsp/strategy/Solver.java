@@ -19,7 +19,7 @@ public class Solver implements Runnable {
 	public Solver(MapWindow window) {
 		this.window = window;
 		paused = true;
-		attempts = new Output("Attempted Paths");
+		attempts = new Output("Attempted Paths", 200);
 		window.addOutput(attempts);
 		bestDistance = new Output("Best Distance");
 		window.addOutput(bestDistance);
@@ -38,7 +38,7 @@ public class Solver implements Runnable {
 	public Branch next() {
 		attempts.increment();
 		Branch next = strategy.next();
-		bestDistance.setValue(Math.min(bestDistance.getIntValue(), next.getWeight()));
+		bestDistance.setValue(Math.min(bestDistance.getLongValue(), next.getWeight()));
 		currentDistance.setValue(next.getWeight());
 		return next;
 	}

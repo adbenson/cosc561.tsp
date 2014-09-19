@@ -11,16 +11,20 @@ public class Output {
 	private final String label;
 	private final JLabel field;
 	
-	private int value;
+	private long value;
+	private long nextUpdate;
+	private int updateInterval;
 	
 	public Output(String label) {
+		this(label, 1);
+	}
+	
+	public Output(String label, int updateInterval) {
 		this.label = label;
 		this.field = new JLabel("", JLabel.RIGHT);
-		
-//		field.setMaximumSize());
-//		field.setEditable(false);
-		
 		value = 0;
+		nextUpdate = 1;
+		this.updateInterval = updateInterval;
 	}
 
 	public String getLabel() {
@@ -31,9 +35,9 @@ public class Output {
 		return field;
 	}
 
-	public void setValue(int value) {
+	public void setValue(long value) {
 		this.value = value;
-		setValue(Integer.toString(value));
+		setValue(Long.toString(value));
 	}
 	
 	public void increment() {
@@ -42,6 +46,13 @@ public class Output {
 	}
 	
 	public void setValue(String value) {
+		if (this.value >= this.nextUpdate) {
+			setFieldValue(value);
+			this.nextUpdate = this.nextUpdate + this.updateInterval;
+		}
+	}
+	
+	private void setFieldValue(final String value) {
 		try {
 			SwingUtilities.invokeAndWait(new Runnable() {
 				public void run() {
@@ -49,12 +60,11 @@ public class Output {
 				}
 			});
 		} catch (InvocationTargetException | InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("SwingUtilities.invokeAndWait interrupted");
 		}
 	}
 
-	public int getIntValue() {
+	public long getLongValue() {
 		return this.value;
 	}
 	
