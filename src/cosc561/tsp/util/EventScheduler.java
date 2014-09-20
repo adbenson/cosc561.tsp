@@ -106,7 +106,7 @@ public class EventScheduler {
 			
 			for (Event event : eventList) {
 				if (event.shouldRun(paused, skipEvents)) {
-					event.start();
+					event.invoke();
 				}
 			}
 		};
@@ -139,7 +139,7 @@ public class EventScheduler {
 	 */
 	public void end() {
 		if (!running) {
-			System.out.println("End called when cycle not running");
+			System.err.println("End called when cycle not running");
 		}
 		else {
 			//End the cycle
@@ -168,7 +168,7 @@ public class EventScheduler {
 	
 	/**
 	 * Takes the desired number of cycles per second 
-	 *  and returns the period in millisecons
+	 *  and returns the period in milliseconds
 	 * @param cps the number of cycles per second desired
 	 * @return corresponding interval in milliseconds between cycles
 	 */
@@ -201,9 +201,8 @@ public class EventScheduler {
 		public int getTotalSkips() {
 			return totalSkips;
 		}
-		
-		public void start() {
-		}
+
+		protected abstract void invoke();
 		
 		public boolean shouldRun(boolean paused, boolean skipEvents) {
 			//If the game is paused and this event is allowed to pause, don't run
@@ -211,13 +210,13 @@ public class EventScheduler {
 				return false;
 			}
 			
-			//If this even't isn't "skippable", run it
+			//If we don't need to skip, don't. Duh.
 			if (! skipEvents) {
 				return true;
 			}
 			else {
 				//Check if we haven't skipped too many times
-				if (skips < skipTolerance && skipEvents) {
+				if (skips < skipTolerance) {
 					skips++;
 					totalSkips++;
 					return false;
@@ -235,48 +234,105 @@ public class EventScheduler {
 		public ConsecutiveEvent(boolean pauseable, int skipTolerance, Runnable event) {
 			super(pauseable, skipTolerance, event);
 		}
-		
-		public void start() {
+
+		@Override
+		protected void invoke() {
 			event.run();
 		}
 	}
 	
 	public class ConcurrentEvent extends Event {
-		public ConcurrentEvent(boolean pauseable, int skipTolerance, Runnable event) {
+		private volatile Thread thread;
+		private final int priority;
+		
+		public ConcurrentEvent(boolean pauseable, int skipTolerance, int priority, Runnable event) {
 			super(pauseable, skipTolerance, event);
+			this.priority = priority;
 		}
 		
-		public void start() {
-			Thread thread = new Thread(event);
+		@Override
+		public boolean shouldRun(boolean paused, boolean skipEvents) {
+			if (!super.shouldRun(paused, skipEvents)) {
+				return false;
+			}
+			
+			//If the previous execution hasn't finished, skip if allowed.
+			if (thread != null && thread.isAlive() && (skips < skipTolerance)) {
+				skips++;
+				totalSkips++;
+				return false;
+			}
+			
+			return true;
+		}
+
+		@Override
+		protected void invoke() {
+			thread = new Thread(event);
+			thread.setPriority(priority);
 			thread.start();
 		}
 	}
 	
 	public class ContinuousEvent extends Event {
-		private volatile boolean eventRunning;
+		private final int priority;
+		private volatile Thread thread;
+		private volatile boolean skipRun;
 		
-		public ContinuousEvent(boolean pauseable, int skipTolerance, Runnable event) {
+		public ContinuousEvent(boolean pauseable, int skipTolerance, int priority, Runnable event) {
 			super (pauseable, skipTolerance, event);
-			eventRunning = false;
+			this.priority = priority;
+			skipRun = false;
+		}
+		
+		@Override
+		public boolean shouldRun(boolean paused, boolean skipEvents) {
+			boolean shouldRun = super.shouldRun(paused, skipEvents);
+			if (!shouldRun) {
+				skipRun = true;
+			}
+			
+			return shouldRun;
 		}
 			
-		public void start() {
-			
-			if (!eventRunning) {
-				Thread thread = new Thread(new Runnable() {
-					public void run() {
-						while(!paused) {
-							event.run();
-						}
-						eventRunning = false;
-					}
-				});
-				
-				thread.start();
-				
-				eventRunning = true;
+		@Override
+		public void invoke() {
+			if (thread == null || !thread.isAlive()) {
+				skipRun = false;
+				startThread();
 			}
 		}
 		
+		private void startThread() {
+			thread = new Thread(new Runnable() {
+				public void run() {
+					while(!paused && running) {
+						event.run();
+						
+						if (skipRun) {
+							yeild();
+						}
+
+					}
+				}
+
+				//Thread.yield() was not sufficiently yielding.
+				private void yeild() {
+					try {
+						Thread.sleep(1);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			});
+			
+			thread.setPriority(priority);
+			thread.start();
+		}
+		
+	}
+
+	public synchronized boolean isRunning() {
+		return running;
 	}
 }

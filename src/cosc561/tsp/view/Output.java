@@ -53,15 +53,7 @@ public class Output {
 	}
 	
 	private void setFieldValue(final String value) {
-		try {
-			SwingUtilities.invokeAndWait(new Runnable() {
-				public void run() {
-					field.setText(value);
-				}
-			});
-		} catch (InvocationTargetException | InterruptedException e) {
-			System.err.println("SwingUtilities.invokeAndWait interrupted");
-		}
+		field.setText(value);
 	}
 
 	public long getLongValue() {

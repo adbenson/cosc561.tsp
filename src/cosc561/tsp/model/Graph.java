@@ -8,27 +8,27 @@ import java.util.Set;
 
 public class Graph {
 	
-	private ArrayList<Node> nodes;
+	private List<Node> nodes;
 	
 	private int maxX = 0;
 	private int maxY = 0;
+	
+	public Graph(List<Node> nodes) {
+		this.nodes = nodes;
+	}
 		
-	public Graph() {
-		nodes = new ArrayList<>();
+	public Graph(List<Node> nodes, int nodeCap) {
+		this.nodes = new ArrayList<>();
+		addNodes(nodes, nodeCap);
 	}
 	
-	public void addNode(Node node) {
+	private void addNode(Node node) {
 		this.nodes.add(node);
 		this.maxX = Math.max(this.maxX, node.x);
 		this.maxX = Math.max(this.maxX, node.x);
 	}
 	
-	public void addNodes(List<Node> nodes) {
-		addNodes(nodes, nodes.size());
-	}
-	
-	public void addNodes(List<Node> nodes, int cap) {
-		
+	private void addNodes(List<Node> nodes, int cap) {
 		for(int i = 0; i < cap && i < nodes.size(); i++) {
 			addNode(nodes.get(i));
 		}

@@ -2,6 +2,7 @@ package cosc561.tsp.strategy;
 
 import java.util.PriorityQueue;
 
+import cosc561.tsp.Solver;
 import cosc561.tsp.model.Branch;
 import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.Node;
