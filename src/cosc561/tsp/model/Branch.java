@@ -10,7 +10,7 @@ public class Branch implements Comparable<Branch> {
 	List<Node> path;
 	List<Edge> edges;
 	
-	HashSet<Node> unvisited;
+	Set<Node> unvisited;
 		
 	Node start;
 	Node end;
@@ -45,6 +45,33 @@ public class Branch implements Comparable<Branch> {
 		this.end = node;
 		this.weight = that.weight + that.end.distance(node);
 	}
+	
+	public Branch(SparseBranch sparse, Graph graph) {
+		this.weight = sparse.weight;
+		this.path = sparse.nodes(graph);
+		
+		this.unvisited = graph.getNodesNotIn(path);
+
+		this.edges = buildEdges(path);
+
+		this.start = path.get(0);
+		this.end = path.get(path.size() - 1);
+	}
+
+	private List<Edge> buildEdges(List<Node> path) {
+		List<Edge> edges = new ArrayList<>();
+		
+		Node previous = null;
+		for (Node node : path) {
+			if (previous != null) {
+				edges.add(new Edge(previous, node));
+			}
+			
+			previous = node;
+		}
+		
+		return edges;
+	}
 
 	@Override
 	public int compareTo(Branch that) {
@@ -77,5 +104,38 @@ public class Branch implements Comparable<Branch> {
 
 	public int getWeight() {
 		return weight;
+	}
+	
+	public SparseBranch getSparse() {
+		return new SparseBranch(this);
+	}
+	
+	public static class SparseBranch implements Comparable<SparseBranch> {
+		public final short weight;
+		public final byte[] path;
+		
+		private SparseBranch(Branch branch) {
+			this.weight = (short) branch.weight;
+			this.path = new byte[branch.path.size()];
+			
+			for (int i = 0; i < path.length; i++) {
+				this.path[i] = (byte) branch.path.get(i).id;
+			}
+		}
+		
+		private List<Node> nodes(Graph graph) {
+			List<Node> nodes = new ArrayList<Node>();
+			
+			for (byte id : path) {
+				nodes.add(graph.getNode(id));
+			}
+			
+			return nodes;
+		}
+		
+		@Override
+		public int compareTo(SparseBranch that) {
+			return this.weight - that.weight;
+		}
 	}
 }
