@@ -3,6 +3,7 @@ package cosc561.tsp.strategy;
 import java.util.PriorityQueue;
 
 import cosc561.tsp.model.Branch;
+import cosc561.tsp.model.Branch.SparseBranch;
 import cosc561.tsp.model.Edge;
 import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.Node;
@@ -11,7 +12,7 @@ import cosc561.tsp.view.Output;
 
 public class ClassHeuristic extends Strategy {
 
-	PriorityQueue<Branch> branches;
+	PriorityQueue<SparseBranch> branches;
 	Branch current;
 	
 	private Output rejected;
@@ -36,7 +37,7 @@ public class ClassHeuristic extends Strategy {
 	protected Branch next() {
 		for(Node node : current.getUnvisited()) {
 			if (nonIntersecting(current, node)) {
-				branches.add(new Branch(current, node));
+				branches.add(new Branch(current, node).getSparse());
 			}
 			else {
 				rejected.increment();
@@ -44,7 +45,7 @@ public class ClassHeuristic extends Strategy {
 			}
 		}
 	
-		current = branches.poll();
+		current = new Branch(branches.poll(), graph);
 		if (current == null) {
 			System.err.println("branches empty");
 		}
