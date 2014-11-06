@@ -6,6 +6,10 @@ import java.util.Set;
 
 public class Node {
 	
+	private static int lastId = 0;
+
+	public final int id;
+	
 	public final int x;
 	public final int y;
 	
@@ -15,7 +19,8 @@ public class Node {
 		super();
 		this.x = x;
 		this.y = y;
-		
+		this.id = lastId++;
+
 		distances = new HashMap<>();
 	}
 	
@@ -46,6 +51,10 @@ public class Node {
 		}
 		
 		return nearest;
+	}
+	
+	public static int getLastId() {
+		return lastId - 1;
 	}
 	
 	private double calculateDistance(Node that) {
