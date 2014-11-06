@@ -16,7 +16,7 @@ public class TravellingSalesman {
 	public static final int MAX_COORDS = 100;
 	public static final int SCALE = DIMENSION/MAX_COORDS;
 	
-	public static final int FPS = 10;
+	public static final int FPS = 2;
 	public static final int TOLERANCE = 10;
 	
 	public static final Class<? extends Strategy> DEFAULT_STRATEGY = ClassHeuristic.class;

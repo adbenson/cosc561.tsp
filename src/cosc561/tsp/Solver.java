@@ -36,7 +36,7 @@ public class Solver extends Controls {
 		int intervalMs = EventScheduler.cyclesPerSecond(TravellingSalesman.FPS);
 		scheduler = new EventScheduler(intervalMs, TravellingSalesman.TOLERANCE);
 		
-		scheduler.addEvent(scheduler.new ContinuousEvent(true, 1, Thread.MIN_PRIORITY, new Runnable() {
+		scheduler.addEvent(scheduler.new ContinuousEvent(true, 1, new Runnable() {
 			public void run() {
 				next(false);
 			}
