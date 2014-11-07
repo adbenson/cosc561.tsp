@@ -44,8 +44,11 @@ public class PartitionedQueue<Element extends Partitionable & Comparable<Element
 		if (head.isEmpty()) {
 			partitions.remove(e.getPartition());
 			System.out.println("emtpy queue");
-			
 			head = nextHead();
+			
+			//I know, conventional wisdom is that this is next to pointless.
+			//But this is a moment where we have potentially freed up a bunch of memory.
+			System.gc();
 		}
 		
 		return e;
