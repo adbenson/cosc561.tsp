@@ -76,7 +76,12 @@ public class Solver extends Controls {
 			stop();
 			return;
 		}
-		currentBranch = strategy.nextBranch();
+		try {
+			currentBranch = strategy.nextBranch();
+		} catch (Exception e) {
+			System.err.println("Exception encountered getting next branch");
+			e.printStackTrace();
+		}
 		
 		if (manual) {
 			render();
