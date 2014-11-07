@@ -5,7 +5,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Branch implements Comparable<Branch> {
+import cosc561.tsp.util.Partitionable;
+
+public class Branch implements Comparable<Branch>, Partitionable {
 	
 	List<Node> path;
 	List<Edge> edges;
@@ -106,11 +108,16 @@ public class Branch implements Comparable<Branch> {
 		return weight;
 	}
 	
+	@Override
+	public int getPartition() {
+		return path.size() / 10;
+	}
+	
 	public SparseBranch getSparse() {
 		return new SparseBranch(this);
 	}
 	
-	public static class SparseBranch implements Comparable<SparseBranch> {
+	public static class SparseBranch implements Comparable<SparseBranch>, Partitionable {
 		public final short weight;
 		public final byte[] path;
 		
@@ -144,6 +151,11 @@ public class Branch implements Comparable<Branch> {
 		@Override
 		public int compareTo(SparseBranch that) {
 			return this.weight - that.weight;
+		}
+		
+		@Override
+		public int getPartition() {
+			return weight / 10;
 		}
 	}
 }
