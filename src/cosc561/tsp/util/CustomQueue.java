@@ -86,10 +86,7 @@ import java.util.Queue;
  * @author Josh Bloch, Doug Lea
  * @param <E> the type of elements held in this collection
  */
-public class CustomQueue<E> extends AbstractQueue<E>
-    implements java.io.Serializable {
-
-    private static final long serialVersionUID = -7720805057305804111L;
+public class CustomQueue<E> {
 
     private static final int DEFAULT_INITIAL_CAPACITY = 11;
 
@@ -199,221 +196,8 @@ public class CustomQueue<E> extends AbstractQueue<E>
         return (E) queue[0];
     }
 
-    private int indexOf(Object o) {
-        if (o != null) {
-            for (int i = 0; i < size; i++)
-                if (o.equals(queue[i]))
-                    return i;
-        }
-        return -1;
-    }
-
-    /**
-     * Removes a single instance of the specified element from this queue,
-     * if it is present.  More formally, removes an element {@code e} such
-     * that {@code o.equals(e)}, if this queue contains one or more such
-     * elements.  Returns {@code true} if and only if this queue contained
-     * the specified element (or equivalently, if this queue changed as a
-     * result of the call).
-     *
-     * @param o element to be removed from this queue, if present
-     * @return {@code true} if this queue changed as a result of the call
-     */
-    public boolean remove(Object o) {
-        int i = indexOf(o);
-        if (i == -1)
-            return false;
-        else {
-            removeAt(i);
-            return true;
-        }
-    }
-
-    /**
-     * Version of remove using reference equality, not equals.
-     * Needed by iterator.remove.
-     *
-     * @param o element to be removed from this queue, if present
-     * @return {@code true} if removed
-     */
-    boolean removeEq(Object o) {
-        for (int i = 0; i < size; i++) {
-            if (o == queue[i]) {
-                removeAt(i);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Returns {@code true} if this queue contains the specified element.
-     * More formally, returns {@code true} if and only if this queue contains
-     * at least one element {@code e} such that {@code o.equals(e)}.
-     *
-     * @param o object to be checked for containment in this queue
-     * @return {@code true} if this queue contains the specified element
-     */
-    public boolean contains(Object o) {
-        return indexOf(o) != -1;
-    }
-
-    /**
-     * Returns an array containing all of the elements in this queue.
-     * The elements are in no particular order.
-     *
-     * <p>The returned array will be "safe" in that no references to it are
-     * maintained by this queue.  (In other words, this method must allocate
-     * a new array).  The caller is thus free to modify the returned array.
-     *
-     * <p>This method acts as bridge between array-based and collection-based
-     * APIs.
-     *
-     * @return an array containing all of the elements in this queue
-     */
-    public Object[] toArray() {
-        return Arrays.copyOf(queue, size);
-    }
-
-    /**
-     * Returns an array containing all of the elements in this queue; the
-     * runtime type of the returned array is that of the specified array.
-     * The returned array elements are in no particular order.
-     * If the queue fits in the specified array, it is returned therein.
-     * Otherwise, a new array is allocated with the runtime type of the
-     * specified array and the size of this queue.
-     *
-     * <p>If the queue fits in the specified array with room to spare
-     * (i.e., the array has more elements than the queue), the element in
-     * the array immediately following the end of the collection is set to
-     * {@code null}.
-     *
-     * <p>Like the {@link #toArray()} method, this method acts as bridge between
-     * array-based and collection-based APIs.  Further, this method allows
-     * precise control over the runtime type of the output array, and may,
-     * under certain circumstances, be used to save allocation costs.
-     *
-     * <p>Suppose <tt>x</tt> is a queue known to contain only strings.
-     * The following code can be used to dump the queue into a newly
-     * allocated array of <tt>String</tt>:
-     *
-     * <pre>
-     *     String[] y = x.toArray(new String[0]);</pre>
-     *
-     * Note that <tt>toArray(new Object[0])</tt> is identical in function to
-     * <tt>toArray()</tt>.
-     *
-     * @param a the array into which the elements of the queue are to
-     *          be stored, if it is big enough; otherwise, a new array of the
-     *          same runtime type is allocated for this purpose.
-     * @return an array containing all of the elements in this queue
-     * @throws ArrayStoreException if the runtime type of the specified array
-     *         is not a supertype of the runtime type of every element in
-     *         this queue
-     * @throws NullPointerException if the specified array is null
-     */
-    public <T> T[] toArray(T[] a) {
-        if (a.length < size)
-            // Make a new array of a's runtime type, but my contents:
-            return (T[]) Arrays.copyOf(queue, size, a.getClass());
-        System.arraycopy(queue, 0, a, 0, size);
-        if (a.length > size)
-            a[size] = null;
-        return a;
-    }
-
-    /**
-     * Returns an iterator over the elements in this queue. The iterator
-     * does not return the elements in any particular order.
-     *
-     * @return an iterator over the elements in this queue
-     */
-    public Iterator<E> iterator() {
-        return new Itr();
-    }
-
-    private final class Itr implements Iterator<E> {
-        /**
-         * Index (into queue array) of element to be returned by
-         * subsequent call to next.
-         */
-        private int cursor = 0;
-
-        /**
-         * Index of element returned by most recent call to next,
-         * unless that element came from the forgetMeNot list.
-         * Set to -1 if element is deleted by a call to remove.
-         */
-        private int lastRet = -1;
-
-        /**
-         * A queue of elements that were moved from the unvisited portion of
-         * the heap into the visited portion as a result of "unlucky" element
-         * removals during the iteration.  (Unlucky element removals are those
-         * that require a siftup instead of a siftdown.)  We must visit all of
-         * the elements in this list to complete the iteration.  We do this
-         * after we've completed the "normal" iteration.
-         *
-         * We expect that most iterations, even those involving removals,
-         * will not need to store elements in this field.
-         */
-        private ArrayDeque<E> forgetMeNot = null;
-
-        /**
-         * Element returned by the most recent call to next iff that
-         * element was drawn from the forgetMeNot list.
-         */
-        private E lastRetElt = null;
-
-        public boolean hasNext() {
-            return cursor < size ||
-                (forgetMeNot != null && !forgetMeNot.isEmpty());
-        }
-
-        public E next() {
-            if (cursor < size)
-                return (E) queue[lastRet = cursor++];
-            if (forgetMeNot != null) {
-                lastRet = -1;
-                lastRetElt = forgetMeNot.poll();
-                if (lastRetElt != null)
-                    return lastRetElt;
-            }
-            throw new NoSuchElementException();
-        }
-
-        public void remove() {
-            if (lastRet != -1) {
-                E moved = CustomQueue.this.removeAt(lastRet);
-                lastRet = -1;
-                if (moved == null)
-                    cursor--;
-                else {
-                    if (forgetMeNot == null)
-                        forgetMeNot = new ArrayDeque<E>();
-                    forgetMeNot.add(moved);
-                }
-            } else if (lastRetElt != null) {
-                CustomQueue.this.removeEq(lastRetElt);
-                lastRetElt = null;
-            } else {
-                throw new IllegalStateException();
-            }
-        }
-    }
-
     public int size() {
         return size;
-    }
-
-    /**
-     * Removes all of the elements from this priority queue.
-     * The queue will be empty after this call returns.
-     */
-    public void clear() {
-        for (int i = 0; i < size; i++)
-            queue[i] = null;
-        size = 0;
     }
 
     public E poll() {
@@ -426,36 +210,6 @@ public class CustomQueue<E> extends AbstractQueue<E>
         if (s != 0)
             siftDown(0, x);
         return result;
-    }
-
-    /**
-     * Removes the ith element from queue.
-     *
-     * Normally this method leaves the elements at up to i-1,
-     * inclusive, untouched.  Under these circumstances, it returns
-     * null.  Occasionally, in order to maintain the heap invariant,
-     * it must swap a later element of the list with one earlier than
-     * i.  Under these circumstances, this method returns the element
-     * that was previously at the end of the list and is now at some
-     * position before i. This fact is used by iterator.remove so as to
-     * avoid missing traversing elements.
-     */
-    private E removeAt(int i) {
-        assert i >= 0 && i < size;
-        int s = --size;
-        if (s == i) // removed last element
-            queue[i] = null;
-        else {
-            E moved = (E) queue[s];
-            queue[s] = null;
-            siftDown(i, moved);
-            if (queue[i] == moved) {
-                siftUp(i, moved);
-                if (queue[i] != moved)
-                    return moved;
-            }
-        }
-        return null;
     }
 
     /**
@@ -507,15 +261,6 @@ public class CustomQueue<E> extends AbstractQueue<E>
             k = child;
         }
         queue[k] = key;
-    }
-
-    /**
-     * Establishes the heap invariant (described above) in the entire tree,
-     * assuming nothing about the order of the elements prior to the call.
-     */
-    private void heapify() {
-        for (int i = (size >>> 1) - 1; i >= 0; i--)
-            siftDown(i, (E) queue[i]);
     }
 
 }
