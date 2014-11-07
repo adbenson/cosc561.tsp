@@ -6,7 +6,6 @@ import java.util.Queue;
 import cosc561.tsp.Solver;
 import cosc561.tsp.model.Branch;
 import cosc561.tsp.model.Graph;
-import cosc561.tsp.model.Node;
 import cosc561.tsp.view.MapWindow;
 
 public class Greedy extends Strategy {

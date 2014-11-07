@@ -1,6 +1,5 @@
 package cosc561.tsp.strategy;
 
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 

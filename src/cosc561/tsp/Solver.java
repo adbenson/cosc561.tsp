@@ -1,6 +1,5 @@
 package cosc561.tsp;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import cosc561.tsp.model.Branch;
@@ -11,7 +10,6 @@ import cosc561.tsp.strategy.Strategy.StrategyInstantiationException;
 import cosc561.tsp.util.EventScheduler;
 import cosc561.tsp.view.Controls;
 import cosc561.tsp.view.MapWindow;
-import cosc561.tsp.view.Output;
 
 public class Solver extends Controls {
 	
