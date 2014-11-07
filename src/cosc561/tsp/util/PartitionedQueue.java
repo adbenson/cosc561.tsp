@@ -1,11 +1,6 @@
 package cosc561.tsp.util;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.PriorityQueue;
@@ -79,53 +74,4 @@ public class PartitionedQueue<Element extends Partitionable & Comparable<Element
 		return sb.toString();
 	}
 	
-	private class QueueHeadComparator<Type extends Comparable<Type>> implements Comparator<Queue<Type>> {
-
-		@Override
-		public int compare(Queue<Type> a, Queue<Type> b) {
-			if (a.isEmpty()) {
-				return -1;
-			}
-			else if (b.isEmpty()) {
-				return 1;
-			}
-			
-			return a.peek().compareTo(b.peek());
-		}
-		
-	}
-	
-	private class SortedList<Type> {
-		private List<Type> list;
-		private Comparator<Type> comparator;
-		
-		public SortedList(Comparator<Type> c) {
-			this.list = new LinkedList<>();
-			this.comparator = c;
-		}
-
-		public void remove(Queue<Element> e) {
-			list.remove(e);
-			resort();
-		}
-
-		public boolean contains(Type e) {
-			return list.contains(e);
-		}
-
-		public Type getHead() {
-			return list.get(0);
-		}
-
-		public void resort() {
-			Collections.sort(list, comparator);
-		}
-
-		public void add(Type queue) {
-			list.add(queue);
-			resort();
-		}
-		
-	}
-
 }
