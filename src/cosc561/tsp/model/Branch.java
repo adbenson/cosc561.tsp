@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import cosc561.tsp.model.Branch.SparseBranch.SparseBranchException;
 
 public class Branch implements Comparable<Branch> {
 	
@@ -46,7 +47,7 @@ public class Branch implements Comparable<Branch> {
 		this.weight = that.weight + that.end.distance(node);
 	}
 	
-	public Branch(SparseBranch sparse, Graph graph) {
+	public Branch(SparseBranch sparse, Graph graph) throws SparseBranchException {
 		this.weight = sparse.weight;
 		this.path = sparse.nodes(graph);
 		
@@ -106,7 +107,7 @@ public class Branch implements Comparable<Branch> {
 		return weight;
 	}
 	
-	public SparseBranch getSparse() {
+	public SparseBranch getSparse() throws SparseBranchException {
 		return new SparseBranch(this);
 	}
 	
@@ -136,6 +137,18 @@ public class Branch implements Comparable<Branch> {
 		@Override
 		public int compareTo(SparseBranch that) {
 			return this.weight - that.weight;
+		}
+		
+		public class SparseBranchException extends Exception {
+			private static final long serialVersionUID = 1L;
+			
+			public SparseBranchException(String msg) {			
+				this(msg, null);
+			}
+			
+			public SparseBranchException(String msg, Throwable t) {
+				super(msg, t);
+			}
 		}
 	}
 }
