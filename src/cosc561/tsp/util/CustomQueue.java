@@ -237,31 +237,32 @@ public class CustomQueue<E> {
         queue[k] = key;
     }
 
-    /**
-     * Inserts item x at position k, maintaining heap invariant by
-     * demoting x down the tree repeatedly until it is less than or
-     * equal to its children or is a leaf.
-     *
-     * @param k the position to fill
-     * @param x the item to insert
-     */
-    private void siftDown(int k, E x) {
-        Comparable<? super E> key = (Comparable<? super E>)x;
-        int half = size >>> 1;        // loop while a non-leaf
-        while (k < half) {
-            int child = (k << 1) + 1; // assume left child is least
-            Object c = queue[child];
-            int right = child + 1;
-            if (right < size &&
-                ((Comparable<? super E>) c).compareTo((E) queue[right]) > 0)
-                c = queue[child = right];
-            if (key.compareTo((E) c) <= 0)
-                break;
-            queue[k] = c;
-            k = child;
-        }
-        queue[k] = key;
-    }
+	/**
+	 * Inserts item x at position k, maintaining heap invariant by demoting x
+	 * down the tree repeatedly until it is less than or equal to its children
+	 * or is a leaf.
+	 *
+	 * @param k the position to fill
+	 * @param x the item to insert
+	 */
+	private void siftDown(int k, E x) {
+		Comparable<? super E> key = (Comparable<? super E>) x;
+		int half = size >>> 1; // loop while a non-leaf
+		while (k < half) {
+			int child = (k << 1) + 1; // assume left child is least
+			Object c = queue[child];
+			int right = child + 1;
+			if (right < size
+					&& ((Comparable<? super E>) c).compareTo((E) queue[right]) > 0)
+				c = queue[child = right];
+			if (key.compareTo((E) c) <= 0)
+				break;
+			queue[k] = c;
+			k = child;
+		}
+		queue[k] = key;
+	}
+
 	private int indexOf(Object o) {
 		if (o != null) {
 			for (int i = 0; i < size; i++)
