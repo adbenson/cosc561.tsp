@@ -3,10 +3,10 @@ package cosc561.tsp.strategy;
 import java.util.PriorityQueue;
 
 import cosc561.tsp.model.Branch;
-import cosc561.tsp.model.Branch.SparseBranch;
 import cosc561.tsp.model.Edge;
 import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.Node;
+import cosc561.tsp.model.SparseBranch;
 import cosc561.tsp.util.PartitionedQueue;
 import cosc561.tsp.view.MapWindow;
 import cosc561.tsp.view.Output;
