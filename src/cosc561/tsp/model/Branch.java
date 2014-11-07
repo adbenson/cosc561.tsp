@@ -118,9 +118,12 @@ public class Branch implements Comparable<Branch>, Partitionable {
 	}
 	
 	public static class SparseBranch implements Comparable<SparseBranch>, Partitionable {
+		private static final float PARITION_DIVISOR = 100f;
+		private static final int PARTITION_FACTOR = 3;
+		
 		public final short weight;
 		public final byte[] path;
-		
+
 		private SparseBranch(Branch branch) {
 			this.weight = (short) branch.weight;
 
@@ -155,7 +158,7 @@ public class Branch implements Comparable<Branch>, Partitionable {
 		
 		@Override
 		public int getPartition() {
-			return weight / 10;
+			return (int) Math.pow(this.weight / PARITION_DIVISOR, PARTITION_FACTOR);
 		}
 	}
 }
