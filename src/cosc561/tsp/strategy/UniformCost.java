@@ -6,7 +6,7 @@ import cosc561.tsp.Solver;
 import cosc561.tsp.model.Branch;
 import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.Node;
-import cosc561.tsp.model.SparseBranch;
+import cosc561.tsp.model.LightweightBranch;
 import cosc561.tsp.util.PartitionedQueue;
 import cosc561.tsp.view.MapWindow;
 
@@ -18,7 +18,7 @@ public class UniformCost extends Strategy {
 		super(graph, window);
 	}
 
-	PartitionedQueue<SparseBranch> branches;
+	PartitionedQueue<LightweightBranch> branches;
 	Branch current;
 	
 	Solver solver;

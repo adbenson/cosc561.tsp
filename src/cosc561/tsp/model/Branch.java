@@ -48,7 +48,7 @@ public class Branch implements Comparable<Branch>, Partitionable {
 		this.weight = that.weight + that.end.distance(node);
 	}
 	
-	public Branch(SparseBranch sparse, Graph graph) {
+	public Branch(LightweightBranch sparse, Graph graph) {
 		this.weight = sparse.weight;
 		this.path = sparse.nodePath(graph);
 		
@@ -113,8 +113,8 @@ public class Branch implements Comparable<Branch>, Partitionable {
 		return path.size() / 10;
 	}
 	
-	public SparseBranch getSparse() {
-		return new SparseBranch(this);
+	public LightweightBranch getSparse() {
+		return new LightweightBranch(this);
 	}
 
 }
