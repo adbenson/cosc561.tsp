@@ -33,7 +33,7 @@ public class PartitionedQueue<Element extends Partitionable & Comparable<Element
 			queue = new PriorityQueue<>(defaultPartitionSize);
 			partitions.put(partition, queue);
 			
-			if (head == null) {
+			if (head == null || partition < head.peek().getPartition()) {
 				head = queue;
 			}
 		}
