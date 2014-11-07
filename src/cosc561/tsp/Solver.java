@@ -77,8 +77,7 @@ public class Solver extends Controls {
 		try {
 			currentBranch = strategy.nextBranch();
 		} catch (Exception e) {
-			System.err.println("Exception encountered getting next branch");
-			e.printStackTrace();
+			throw new RuntimeException("Exception encountered getting next branch", e);
 		}
 		
 		if (manual) {
