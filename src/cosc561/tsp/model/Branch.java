@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import cosc561.tsp.model.Branch.SparseBranch.SparseBranchException;
 
 public class Branch implements Comparable<Branch> {
@@ -49,7 +50,7 @@ public class Branch implements Comparable<Branch> {
 	
 	public Branch(SparseBranch sparse, Graph graph) throws SparseBranchException {
 		this.weight = sparse.weight;
-		this.path = sparse.nodes(graph);
+		this.path = sparse.nodePath(graph);
 		
 		this.unvisited = graph.getNodesNotIn(path);
 
@@ -115,20 +116,28 @@ public class Branch implements Comparable<Branch> {
 		public final short weight;
 		public final byte[] path;
 		
-		private SparseBranch(Branch branch) {
+		private SparseBranch(Branch branch) throws SparseBranchException {
 			this.weight = (short) branch.weight;
-			this.path = new byte[branch.path.size()];
+
+			this.path = sparsePath(branch.path);
 			
-			for (int i = 0; i < path.length; i++) {
-				this.path[i] = (byte) branch.path.get(i).id;
-			}
 		}
-		
-		private List<Node> nodes(Graph graph) {
+
+		private List<Node> nodePath(Graph graph) throws SparseBranchException {
 			List<Node> nodes = new ArrayList<Node>();
 			
 			for (byte id : path) {
 				nodes.add(graph.getNode(id));
+			}
+			
+			return nodes;
+		}
+		
+		private static byte[] sparsePath(List<Node> path) {
+			byte[] nodes = new byte[path.size()];
+			
+			for (int i = 0; i < nodes.length; i++) {
+				nodes[i] = (byte) path.get(i).id;
 			}
 			
 			return nodes;
