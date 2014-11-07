@@ -5,8 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import cosc561.tsp.model.Branch.SparseBranch.SparseBranchException;
-
 public class Branch implements Comparable<Branch> {
 	
 	List<Node> path;
@@ -48,7 +46,7 @@ public class Branch implements Comparable<Branch> {
 		this.weight = that.weight + that.end.distance(node);
 	}
 	
-	public Branch(SparseBranch sparse, Graph graph) throws SparseBranchException {
+	public Branch(SparseBranch sparse, Graph graph) {
 		this.weight = sparse.weight;
 		this.path = sparse.nodePath(graph);
 		
@@ -108,7 +106,7 @@ public class Branch implements Comparable<Branch> {
 		return weight;
 	}
 	
-	public SparseBranch getSparse() throws SparseBranchException {
+	public SparseBranch getSparse() {
 		return new SparseBranch(this);
 	}
 	
@@ -116,14 +114,14 @@ public class Branch implements Comparable<Branch> {
 		public final short weight;
 		public final byte[] path;
 		
-		private SparseBranch(Branch branch) throws SparseBranchException {
+		private SparseBranch(Branch branch) {
 			this.weight = (short) branch.weight;
 
 			this.path = sparsePath(branch.path);
 			
 		}
 
-		private List<Node> nodePath(Graph graph) throws SparseBranchException {
+		private List<Node> nodePath(Graph graph) {
 			List<Node> nodes = new ArrayList<Node>();
 			
 			for (byte id : path) {
@@ -146,18 +144,6 @@ public class Branch implements Comparable<Branch> {
 		@Override
 		public int compareTo(SparseBranch that) {
 			return this.weight - that.weight;
-		}
-		
-		public class SparseBranchException extends Exception {
-			private static final long serialVersionUID = 1L;
-			
-			public SparseBranchException(String msg) {			
-				this(msg, null);
-			}
-			
-			public SparseBranchException(String msg, Throwable t) {
-				super(msg, t);
-			}
 		}
 	}
 }

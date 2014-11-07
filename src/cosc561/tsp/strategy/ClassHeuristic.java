@@ -4,7 +4,6 @@ import java.util.PriorityQueue;
 
 import cosc561.tsp.model.Branch;
 import cosc561.tsp.model.Branch.SparseBranch;
-import cosc561.tsp.model.Branch.SparseBranch.SparseBranchException;
 import cosc561.tsp.model.Edge;
 import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.Node;
@@ -35,7 +34,7 @@ public class ClassHeuristic extends Strategy {
 	}
 
 	@Override
-	protected Branch next() throws SparseBranchException {
+	protected Branch next() {
 		for(Node node : current.getUnvisited()) {
 			if (nonIntersecting(current, node)) {
 				branches.add(new Branch(current, node).getSparse());
