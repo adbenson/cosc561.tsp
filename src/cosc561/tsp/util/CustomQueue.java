@@ -153,26 +153,13 @@ public class CustomQueue<E> {
     /**
      * Inserts the specified element into this priority queue.
      *
-     * @return {@code true} (as specified by {@link Collection#add})
-     * @throws ClassCastException if the specified element cannot be
-     *         compared with elements currently in this priority queue
-     *         according to the priority queue's ordering
-     * @throws NullPointerException if the specified element is null
-     */
-    public boolean add(E e) {
-        return offer(e);
-    }
-
-    /**
-     * Inserts the specified element into this priority queue.
-     *
      * @return {@code true} (as specified by {@link Queue#offer})
      * @throws ClassCastException if the specified element cannot be
      *         compared with elements currently in this priority queue
      *         according to the priority queue's ordering
      * @throws NullPointerException if the specified element is null
      */
-    public boolean offer(E e) {
+    public boolean add(E e) {
         if (e == null)
             throw new NullPointerException();
         int i = size;
