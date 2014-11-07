@@ -68,9 +68,9 @@ public class PartitionedQueue<Element extends Partitionable & Comparable<Element
 		return head;
 	}
 
-	public String stats() {
+	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("Partitioned Queue\n");
+		sb.append("Partitioned Queue\nPart:\tSize\n");
 		for (Map.Entry<Integer, Queue<Element>> e : partitions.entrySet()) {
 			sb.append(e.getKey()+": \t"+e.getValue().size()+"\n");
 		}
