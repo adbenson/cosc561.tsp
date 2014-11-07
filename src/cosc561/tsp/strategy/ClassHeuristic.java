@@ -13,7 +13,7 @@ import cosc561.tsp.view.Output;
 
 public class ClassHeuristic extends Strategy {
 	
-	private static final int QUEUE_SIZE = 10000;
+	private static final int QUEUE_SIZE = 100000;
 
 	PartitionedQueue<SparseBranch> branches;
 	Branch current;
