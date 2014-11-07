@@ -262,5 +262,62 @@ public class CustomQueue<E> {
         }
         queue[k] = key;
     }
+	private int indexOf(Object o) {
+		if (o != null) {
+			for (int i = 0; i < size; i++)
+				if (o.equals(queue[i]))
+					return i;
+		}
+		return -1;
+	}
+
+	/**
+	 * Removes a single instance of the specified element from this queue, if it
+	 * is present. More formally, removes an element {@code e} such that
+	 * {@code o.equals(e)}, if this queue contains one or more such elements.
+	 * Returns {@code true} if and only if this queue contained the specified
+	 * element (or equivalently, if this queue changed as a result of the call).
+	 *
+	 * @param o element to be removed from this queue, if present
+	 * @return {@code true} if this queue changed as a result of the call
+	 */
+	public boolean remove(Object o) {
+		int i = indexOf(o);
+		if (i == -1)
+			return false;
+		else {
+			removeAt(i);
+			return true;
+		}
+	}
+
+	/**
+	 * Removes the ith element from queue.
+	 *
+	 * Normally this method leaves the elements at up to i-1, inclusive,
+	 * untouched. Under these circumstances, it returns null. Occasionally, in
+	 * order to maintain the heap invariant, it must swap a later element of the
+	 * list with one earlier than i. Under these circumstances, this method
+	 * returns the element that was previously at the end of the list and is now
+	 * at some position before i. This fact is used by iterator.remove so as to
+	 * avoid missing traversing elements.
+	 */
+	private E removeAt(int i) {
+		assert i >= 0 && i < size;
+		int s = --size;
+		if (s == i) // removed last element
+			queue[i] = null;
+		else {
+			E moved = (E) queue[s];
+			queue[s] = null;
+			siftDown(i, moved);
+			if (queue[i] == moved) {
+				siftUp(i, moved);
+				if (queue[i] != moved)
+					return moved;
+			}
+		}
+		return null;
+	}
 
 }
