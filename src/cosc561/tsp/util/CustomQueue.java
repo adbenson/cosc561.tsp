@@ -25,13 +25,10 @@
 
 package cosc561.tsp.util;
 
-import java.util.AbstractQueue;
-import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 import java.util.Queue;
 
 /**
@@ -99,7 +96,6 @@ public class CustomQueue<E> {
      * lowest value is in queue[0], assuming the queue is nonempty.
      */
     private transient Object[] queue;
-    private transient Object[] reverseQueue;
 
     /**
      * The number of elements in the priority queue.
