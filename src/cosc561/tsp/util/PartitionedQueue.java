@@ -1,12 +1,16 @@
 package cosc561.tsp.util;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-public class PartitionedQueue<Element extends Partitionable & Comparable<Element>> {
+import javax.naming.OperationNotSupportedException;
+
+public class PartitionedQueue<Element extends Partitionable & Comparable<Element>> implements Queue<Element> {
 	
 	private int defaultPartitionSize;
 	
@@ -20,7 +24,8 @@ public class PartitionedQueue<Element extends Partitionable & Comparable<Element
 		head = null;
 	}
 	
-	public void add(Element e) {
+	@Override
+	public boolean add(Element e) {
 		int partition = e.getPartition();
 		Queue<Element> queue;
 		
@@ -35,9 +40,10 @@ public class PartitionedQueue<Element extends Partitionable & Comparable<Element
 		
 		queue = partitions.get(partition);
 		
-		queue.add(e);
+		return queue.add(e);
 	}
 	
+	@Override
 	public Element poll() {
 		Element e = head.poll();
 		
@@ -75,6 +81,95 @@ public class PartitionedQueue<Element extends Partitionable & Comparable<Element
 			sb.append(e.getKey()+": \t"+e.getValue().size()+"\n");
 		}
 		return sb.toString();
+	}
+
+	public boolean isEmpty() {
+		return head.isEmpty();
+	}
+
+	@Override
+	public boolean addAll(Collection<? extends Element> elements) {
+		boolean success = true;
+		for(Element e : elements) {
+			success = success && add(e);
+		}
+		
+		return success;
+	}
+
+	@Override
+	public void clear() {
+		partitions = new HashMap<>();
+		head = null;
+	}
+
+	@Override
+	public boolean contains(Object arg0) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean containsAll(Collection<?> arg0) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Iterator<Element> iterator() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean remove(Object arg0) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean removeAll(Collection<?> arg0) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean retainAll(Collection<?> arg0) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public int size() {
+		int size = 0;
+		for (Queue q : partitions.values()) {
+			size += q.size();
+		}
+		return size;
+	}
+
+	@Override
+	public Object[] toArray() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public <T> T[] toArray(T[] arg0) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Element element() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean offer(Element e) {
+		return add(e);
+	}
+
+	@Override
+	public Element peek() {
+		return head.peek();
+	}
+
+	@Override
+	public Element remove() {
+		throw new UnsupportedOperationException();
 	}
 	
 }
