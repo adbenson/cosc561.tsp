@@ -25,7 +25,7 @@ public class UniformCost extends Strategy {
 	
 	public void init() {
 		
-		branches = new PartitionedQueue<>(100000);
+		branches = new PartitionedQueue<>(QUEUE_SIZE);
 		
 		current = new Branch(graph.getRoot(), graph.getNodes());
 	}
