@@ -19,7 +19,7 @@ public abstract class Strategy {
 	private Stats stats;
 	
 	private volatile long attempts;
-	protected volatile int currentDistance;
+	protected volatile float currentDistance;
 	
 	protected Strategy(Graph graph, MapWindow window) {
 		this.graph = graph;

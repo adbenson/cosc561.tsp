@@ -7,9 +7,12 @@ public class Edge {
 	public final Node start;
 	public final Node end;
 	
+	public final float weight;
+	
 	public Edge(Node start, Node end) {
 		this.start = start;
 		this.end = end;
+		weight = start.distance(end);
 	}
 
 	public boolean intersects(Edge that) {

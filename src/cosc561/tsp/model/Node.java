@@ -13,7 +13,7 @@ public class Node {
 	public final int x;
 	public final int y;
 	
-	public HashMap<Node, Integer> distances;
+	public HashMap<Node, Float> distances;
 	
 	public Node(int x, int y) {
 		super();
@@ -33,9 +33,9 @@ public class Node {
 		return (this.x == that.x && this.y == that.y);
 	}
 	
-	public int distance(Node that) {
+	public float distance(Node that) {
 		if (!distances.containsKey(that)) {
-			distances.put(that, (int)calculateDistance(that));
+			distances.put(that, (float)calculateDistance(that));
 		}
 		
 		return distances.get(that);
@@ -66,10 +66,10 @@ public class Node {
 
 		@Override
 		public int compare(Node n1, Node n2) {
-			int distance1 = distances.get(n1);
-			int distance2 = distances.get(n2);
+			float distance1 = distances.get(n1);
+			float distance2 = distances.get(n2);
 			
-			return distance1 - distance2;
+			return (int) Math.signum(distance1 - distance2);
 		}
 		
 	}

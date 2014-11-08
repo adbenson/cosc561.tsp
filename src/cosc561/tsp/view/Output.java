@@ -57,6 +57,11 @@ public class Output {
 	public long getLongValue() {
 		return this.value;
 	}
+
+	public void setValue(float val) {
+		double rounded = Math.round(val * 100) / 100.0;
+		setValue(Double.toString(rounded));
+	}
 	
 
 }
