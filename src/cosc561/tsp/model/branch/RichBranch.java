@@ -21,9 +21,10 @@ public abstract class RichBranch extends Branch {
 	 * 
 	 * @param start
 	 * @param path
+	 * @param pivot 
 	 */
-	public RichBranch(Node start, List<Node> path) {
-		super(path, calculateWeight(path));
+	public RichBranch(List<Node> path, float weight, int pivot) {
+		super(path, weight, pivot);
 		
 		this.path = new ArrayList<>(path);
 		this.edges = buildEdges(path);
@@ -71,14 +72,25 @@ public abstract class RichBranch extends Branch {
 	 * @param that
 	 * @param graph
 	 */
-	public RichBranch(Branch that, Graph graph) {
+	protected RichBranch(Branch that, Graph graph) {
 		super(that);
 		
-		this.path = that.nodePath(graph);
+		this.path = nodePath(graph, that.path);
 		
 		this.edges = buildEdges(path);
 
 		this.start = path.get(0);
+	}
+	
+	
+	private static List<Node> nodePath(Graph graph, byte[] path) {
+		List<Node> nodes = new ArrayList<Node>();
+		
+		for (byte id : path) {
+			nodes.add(graph.getNode(id));
+		}
+		
+		return nodes;
 	}
 
 	private static List<Edge> buildEdges(List<Node> path) {
@@ -94,21 +106,6 @@ public abstract class RichBranch extends Branch {
 		}
 		
 		return edges;
-	}
-	
-	private static float calculateWeight(List<Node> nodes) {
-		float weight = 0;
-		
-		Node previous = null;
-		for (Node next : nodes) {
-			if (previous != null) {
-				weight += previous.distance(next);
-			}
-			
-			previous = next;
-		}
-		
-		return weight;
 	}
 	
 	public abstract boolean isComplete();
@@ -128,10 +125,6 @@ public abstract class RichBranch extends Branch {
 	@Override
 	public int getPartition() {
 		return path.size() / 10;
-	}
-	
-	public Branch getLightweight() {
-		return new Branch(this);
 	}
 	
 }

@@ -13,48 +13,51 @@ public class Branch implements Comparable<Branch>, Partitionable {
 	private static final float PARITION_DIVISOR = 100f;
 	private static final int PARTITION_FACTOR = 3;
 	
-	protected final float weight;
+	private static final byte DEFAULT_PIVOT = Byte.MIN_VALUE;
+	
+	public final float weight;
 	public final byte[] path;
+	public final byte pivot;
+	
+	/**
+	 * Complete Constructor
+	 * 
+	 * @param that
+	 * @param node
+	 */
+	private Branch(byte[] path, float weight, int pivot) {
+		this.path = path;
+		this.weight = weight;
+		this.pivot = (byte) pivot;
+	}
+	
+	/**
+	 * Pivotless Constructor
+	 * 
+	 * @param that
+	 * @param node
+	 */
+	private Branch(byte[] path, float weight) {
+		this(path, weight, DEFAULT_PIVOT);
+	}
 
 	/**
 	 * Initial Path Constructor
 	 * 
 	 * @param start
 	 */
-	public Branch(Node start) {
-		this.path = new byte[1];
-		this.path[0] = (byte) start.id;
-		this.weight = 0;
-	}
-	
-	/**
-	 * Initial Tour Constructor
-	 * 
-	 * @param start
-	 */
-	public Branch(List<Node> path, float weight) {
-		this.path = sparsePath(path);
-		this.weight = weight;
-	}
-	
-	/**
-	 * Copy Constructor
-	 * 
-	 * @param that
-	 */
-	public Branch(Branch that) {
-		this.weight = that.weight;
-		this.path = new byte[that.path.length];
-		System.arraycopy(that.path, 0, this.path, 0, that.path.length);
+	protected Branch(Node start) {
+		this(new byte[] { (byte) start.id }, 0f);
 	}
 
 	/**
-	 * Deflate Constructor
+	 * Tour Constructor
+	 * @param pivot 
 	 * 
-	 * @param richPath
+	 * @param start
 	 */
-	public Branch(RichBranch richPath) {
-		this(richPath.getPath(), richPath.weight);
+	protected Branch(List<Node> path, float weight, int pivot) {
+		this(sparsePath(path), weight, pivot);
 	}
 
 	/**
@@ -69,20 +72,21 @@ public class Branch implements Comparable<Branch>, Partitionable {
 		List<Node> oldPath = that.getPath();
 		oldPath.add(node);
 		this.path = sparsePath(oldPath);
-	}
-
-	public float getWeight() {
-		return weight;
+		
+		this.pivot = DEFAULT_PIVOT;
 	}
 	
-	public List<Node> nodePath(Graph graph) {
-		List<Node> nodes = new ArrayList<Node>();
-		
-		for (byte id : path) {
-			nodes.add(graph.getNode(id));
-		}
-		
-		return nodes;
+	
+	/**
+	 * Copy / Deflate Constructor
+	 * 
+	 * @param that
+	 */
+	public Branch(Branch that) {
+		this.weight = that.weight;
+		this.path = new byte[that.path.length];
+		this.pivot = that.pivot;
+		System.arraycopy(that.path, 0, this.path, 0, that.path.length);
 	}
 	
 	private static byte[] sparsePath(List<Node> path) {
@@ -102,6 +106,6 @@ public class Branch implements Comparable<Branch>, Partitionable {
 	
 	@Override
 	public int getPartition() {
-		return (int) Math.pow(this.weight / PARITION_DIVISOR, PARTITION_FACTOR);
+		return (int) this.weight / 100;//Math.pow(this.weight / PARITION_DIVISOR, PARTITION_FACTOR);
 	}
 }

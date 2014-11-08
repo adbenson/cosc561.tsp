@@ -34,7 +34,7 @@ public abstract class Strategy {
 		RichBranch branch = next();
 		
 		attempts++;
-		currentDistance = branch.getWeight();
+		currentDistance = branch.weight;
 		
 		return branch;
 	};
