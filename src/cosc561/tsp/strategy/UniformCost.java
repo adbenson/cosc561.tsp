@@ -33,7 +33,7 @@ public class UniformCost extends Strategy {
 	@Override
 	protected Branch next() {
 		for(Node node : current.getUnvisited()) {
-			branches.add(new Branch(current, node).getSparse());
+			branches.add(new LightweightBranch(current, node));
 		}
 	
 		current = new Branch(branches.poll(), graph);

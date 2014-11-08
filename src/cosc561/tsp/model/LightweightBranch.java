@@ -19,6 +19,14 @@ public class LightweightBranch implements Comparable<LightweightBranch>, Partiti
 		
 	}
 
+	public LightweightBranch(Branch that, Node node) {
+		this.weight = (short) (that.weight + that.end.distance(node));
+
+		List<Node> oldPath = that.path;
+		oldPath.add(node);
+		this.path = sparsePath(oldPath);
+	}
+
 	public List<Node> nodePath(Graph graph) {
 		List<Node> nodes = new ArrayList<Node>();
 		
