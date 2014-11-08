@@ -2,9 +2,9 @@ package cosc561.tsp;
 
 import java.util.List;
 
-import cosc561.tsp.model.Branch;
 import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.Node;
+import cosc561.tsp.model.branch.RichBranch;
 import cosc561.tsp.strategy.Strategy;
 import cosc561.tsp.strategy.Strategy.StrategyInstantiationException;
 import cosc561.tsp.util.EventScheduler;
@@ -21,7 +21,7 @@ public class Solver extends Controls {
 	private List<Node> allNodes;
 	private int nodeCap = 20;
 	
-	private volatile Branch currentBranch;
+	private volatile RichBranch currentBranch;
 	
 	private volatile boolean render;
 	

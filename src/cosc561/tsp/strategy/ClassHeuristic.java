@@ -2,11 +2,11 @@ package cosc561.tsp.strategy;
 
 import java.util.PriorityQueue;
 
-import cosc561.tsp.model.Branch;
 import cosc561.tsp.model.Edge;
 import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.Node;
-import cosc561.tsp.model.LightweightBranch;
+import cosc561.tsp.model.branch.Branch;
+import cosc561.tsp.model.branch.PathBranch;
 import cosc561.tsp.util.PartitionedQueue;
 import cosc561.tsp.view.MapWindow;
 import cosc561.tsp.view.Output;
@@ -15,8 +15,8 @@ public class ClassHeuristic extends Strategy {
 	
 	private static final int QUEUE_SIZE = 100000;
 
-	PartitionedQueue<LightweightBranch> branches;
-	Branch current;
+	PartitionedQueue<Branch> branches;
+	PathBranch current;
 	
 	private Output rejected;
 	
@@ -31,16 +31,16 @@ public class ClassHeuristic extends Strategy {
 
 		branches = new PartitionedQueue<>(QUEUE_SIZE + graph.getNodes().size());
 		
-		current = new Branch(graph.getRoot(), graph.getNodes());
+		current = new PathBranch(graph.getRoot(), graph.getNodes());
 		
 		rejected.setValue(0);
 	}
 
 	@Override
-	protected Branch next() {
+	protected PathBranch next() {
 		for(Node node : current.getUnvisited()) {
 			if (nonIntersecting(current, node)) {
-				branches.add(new Branch(current, node).getSparse());
+				branches.add(new Branch(current, node));
 			}
 			else {
 				rejected.increment();
@@ -48,7 +48,7 @@ public class ClassHeuristic extends Strategy {
 			}
 		}
 	
-		current = new Branch(branches.poll(), graph);
+		current = new PathBranch(branches.poll(), graph);
 		if (current == null) {
 			System.err.println("branches empty");
 		}
@@ -56,7 +56,7 @@ public class ClassHeuristic extends Strategy {
 		return current;
 	}
 
-	private boolean nonIntersecting(Branch branch, Node node) {
+	private boolean nonIntersecting(PathBranch branch, Node node) {
 		Edge newEdge = new Edge(branch.getEnd(), node);
 		
 		for (Edge edge : branch.getEdges()) {

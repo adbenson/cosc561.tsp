@@ -5,8 +5,10 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.SwingUtilities;
 
-import cosc561.tsp.model.Branch;
+import cosc561.tsp.TravellingSalesman;
 import cosc561.tsp.model.Graph;
+import cosc561.tsp.model.branch.PathBranch;
+import cosc561.tsp.model.branch.RichBranch;
 import cosc561.tsp.view.MapWindow;
 import cosc561.tsp.view.Output;
 
@@ -28,8 +30,8 @@ public abstract class Strategy {
 		reset();
 	}
 	
-	public Branch nextBranch() throws Exception {
-		Branch branch = next();
+	public RichBranch nextBranch() throws Exception {
+		RichBranch branch = next();
 		
 		attempts++;
 		currentDistance = branch.getWeight();
@@ -37,7 +39,7 @@ public abstract class Strategy {
 		return branch;
 	};
 	
-	protected abstract Branch next() throws Exception;
+	protected abstract RichBranch next() throws Exception;
 
 	public abstract void init();
 
@@ -69,6 +71,12 @@ public abstract class Strategy {
 		currentDistance = 0;
 		
 		stats.reset();
+	}
+	
+	protected void debug(String msg) {
+		if (TravellingSalesman.DEBUG) {
+			System.out.println(msg);
+		}
 	}
 	
 	private class Stats {
