@@ -48,7 +48,7 @@ public class Graph {
 	}
 	
 	public List<Node> getNodeList() {
-		return nodes;
+		return new ArrayList<Node>(nodes);
 	}
 	
 	public Dimension getBounds() {
