@@ -3,16 +3,19 @@ package cosc561.tsp.strategy;
 import java.util.PriorityQueue;
 
 import cosc561.tsp.model.Branch;
-import cosc561.tsp.model.Branch.SparseBranch;
 import cosc561.tsp.model.Edge;
 import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.Node;
+import cosc561.tsp.model.LightweightBranch;
+import cosc561.tsp.util.PartitionedQueue;
 import cosc561.tsp.view.MapWindow;
 import cosc561.tsp.view.Output;
 
 public class ClassHeuristic extends Strategy {
+	
+	private static final int QUEUE_SIZE = 100000;
 
-	PriorityQueue<SparseBranch> branches;
+	PartitionedQueue<LightweightBranch> branches;
 	Branch current;
 	
 	private Output rejected;
@@ -25,8 +28,8 @@ public class ClassHeuristic extends Strategy {
 	}
 	
 	public void init() {
-		
-		branches = new PriorityQueue<>();
+
+		branches = new PartitionedQueue<>(QUEUE_SIZE + graph.getNodes().size());
 		
 		current = new Branch(graph.getRoot(), graph.getNodes());
 		

@@ -1,6 +1,5 @@
 package cosc561.tsp;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import cosc561.tsp.model.Branch;
@@ -11,7 +10,6 @@ import cosc561.tsp.strategy.Strategy.StrategyInstantiationException;
 import cosc561.tsp.util.EventScheduler;
 import cosc561.tsp.view.Controls;
 import cosc561.tsp.view.MapWindow;
-import cosc561.tsp.view.Output;
 
 public class Solver extends Controls {
 	
@@ -36,7 +34,7 @@ public class Solver extends Controls {
 		int intervalMs = EventScheduler.cyclesPerSecond(TravellingSalesman.FPS);
 		scheduler = new EventScheduler(intervalMs, TravellingSalesman.TOLERANCE);
 		
-		scheduler.addEvent(scheduler.new ContinuousEvent(true, 1, Thread.MIN_PRIORITY, new Runnable() {
+		scheduler.addEvent(scheduler.new ContinuousEvent(true, 1, new Runnable() {
 			public void run() {
 				next(false);
 			}
@@ -76,7 +74,11 @@ public class Solver extends Controls {
 			stop();
 			return;
 		}
-		currentBranch = strategy.nextBranch();
+		try {
+			currentBranch = strategy.nextBranch();
+		} catch (Exception e) {
+			throw new RuntimeException("Exception encountered getting next branch", e);
+		}
 		
 		if (manual) {
 			render();

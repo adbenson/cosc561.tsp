@@ -5,7 +5,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Branch implements Comparable<Branch> {
+import cosc561.tsp.util.Partitionable;
+
+public class Branch implements Comparable<Branch>, Partitionable {
 	
 	List<Node> path;
 	List<Edge> edges;
@@ -46,9 +48,9 @@ public class Branch implements Comparable<Branch> {
 		this.weight = that.weight + that.end.distance(node);
 	}
 	
-	public Branch(SparseBranch sparse, Graph graph) {
+	public Branch(LightweightBranch sparse, Graph graph) {
 		this.weight = sparse.weight;
-		this.path = sparse.nodes(graph);
+		this.path = sparse.nodePath(graph);
 		
 		this.unvisited = graph.getNodesNotIn(path);
 
@@ -106,36 +108,13 @@ public class Branch implements Comparable<Branch> {
 		return weight;
 	}
 	
-	public SparseBranch getSparse() {
-		return new SparseBranch(this);
+	@Override
+	public int getPartition() {
+		return path.size() / 10;
 	}
 	
-	public static class SparseBranch implements Comparable<SparseBranch> {
-		public final short weight;
-		public final byte[] path;
-		
-		private SparseBranch(Branch branch) {
-			this.weight = (short) branch.weight;
-			this.path = new byte[branch.path.size()];
-			
-			for (int i = 0; i < path.length; i++) {
-				this.path[i] = (byte) branch.path.get(i).id;
-			}
-		}
-		
-		private List<Node> nodes(Graph graph) {
-			List<Node> nodes = new ArrayList<Node>();
-			
-			for (byte id : path) {
-				nodes.add(graph.getNode(id));
-			}
-			
-			return nodes;
-		}
-		
-		@Override
-		public int compareTo(SparseBranch that) {
-			return this.weight - that.weight;
-		}
+	public LightweightBranch getSparse() {
+		return new LightweightBranch(this);
 	}
+
 }

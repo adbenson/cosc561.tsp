@@ -30,6 +30,8 @@ public class EventScheduler {
 	 */
 	private LinkedList<Event> eventList;
 	
+	private LinkedList<Event> continuousEventList;
+	
 	/**
 	 * The number of cycles this scheduler has run without sleeping or yielding.
 	 * When this exceeds the given yieldAllowance, the scheulder will yield to avoid
@@ -52,11 +54,6 @@ public class EventScheduler {
 	 * The system time when we should ideally run the next cycle
 	 */
 	private int targetCycleStartTime;
-	
-	/**
-	 * The approximate time in ms to sleep in order to hit the next target start time
-	 */
-	private int delayToSynchronize;
 
 	/**
 	 * 
@@ -68,7 +65,8 @@ public class EventScheduler {
 		this.yieldAllowance = yieldAllowance;
 		running = paused = false;
 		uninterruptedCycles = 0;
-		eventList = new LinkedList<Event>();		
+		eventList = new LinkedList<>();	
+		continuousEventList = new LinkedList<>();
 	}
 	
 	private void cycle() {
@@ -78,27 +76,8 @@ public class EventScheduler {
 			//Figure out when we want the next cycle to start
 			targetCycleStartTime += period;
 			
-			//Find out how far away from now that is
-			delayToSynchronize = targetCycleStartTime - realTime();
-						
-			//If we have time before the next cycle, sleep for that long
-			if (delayToSynchronize > 0) {
-				try {
-					Thread.sleep(delayToSynchronize);
-				} catch (InterruptedException e) {
-					System.err.println("Unexpected Interruption to EventScheduler cycle");
-					e.printStackTrace();
-				} finally {
-					uninterruptedCycles = 0;
-				}
-			}
-			//If we're already past the target time, note that we haven't yielded 
-			// and start skipping the skippable events
-			else {
-				uninterruptedCycles++;
-				skipEvents = true;
-			}
-			
+			synchronize();
+
 			if (uninterruptedCycles >= yieldAllowance) {
 				Thread.yield();
 				uninterruptedCycles = 0;
@@ -112,6 +91,44 @@ public class EventScheduler {
 		};
 	}
 	
+	private void synchronize() {
+		
+		//Find out how far away from now that is
+		int delayToSynchronize = targetCycleStartTime - realTime();
+					
+		//If we have time before the next cycle, sleep for that long
+		if (delayToSynchronize <= 0) {
+			uninterruptedCycles++;
+			skipEvents = true;
+			return;
+		}
+		
+		if (continuousEventList.isEmpty() || paused) {
+			sleep(delayToSynchronize);
+			uninterruptedCycles = 0;
+		}
+		else {
+			while (realTime() < targetCycleStartTime) {
+				runContinuousEvents();
+			}
+		}
+	}
+	
+	private void runContinuousEvents() {
+		for (Event event : continuousEventList) {
+			event.invoke();
+		}
+	}
+	
+	private void sleep(int time) {
+		try {
+			Thread.sleep(time);
+		} catch (InterruptedException e) {
+			System.err.println("Unexpected Interruption to EventScheduler cycle");
+			e.printStackTrace();
+		}
+	}
+
 	public static int realTime() {
 		return (int) (System.nanoTime() / 1000000L);
 	}
@@ -183,6 +200,10 @@ public class EventScheduler {
 	 */
 	public void addEvent(Event newEvent) {
 		eventList.add(newEvent);
+		
+		if (newEvent.isContinuous()) {
+			continuousEventList.add(newEvent);
+		}
 	}
 	
 	private abstract class Event {
@@ -203,6 +224,10 @@ public class EventScheduler {
 		}
 
 		protected abstract void invoke();
+		
+		public boolean isContinuous() {
+			return false;
+		}
 		
 		public boolean shouldRun(boolean paused, boolean skipEvents) {
 			//If the game is paused and this event is allowed to pause, don't run
@@ -274,62 +299,14 @@ public class EventScheduler {
 		}
 	}
 	
-	public class ContinuousEvent extends Event {
-		private final int priority;
-		private volatile Thread thread;
-		private volatile boolean skipRun;
-		
-		public ContinuousEvent(boolean pauseable, int skipTolerance, int priority, Runnable event) {
-			super (pauseable, skipTolerance, event);
-			this.priority = priority;
-			skipRun = false;
+	public class ContinuousEvent extends ConsecutiveEvent {
+		public ContinuousEvent(boolean pauseable, int skipTolerance, Runnable event) {
+			super(pauseable, skipTolerance, event);
 		}
-		
-		@Override
-		public boolean shouldRun(boolean paused, boolean skipEvents) {
-			boolean shouldRun = super.shouldRun(paused, skipEvents);
-			if (!shouldRun) {
-				skipRun = true;
-			}
-			
-			return shouldRun;
-		}
-			
-		@Override
-		public void invoke() {
-			if (thread == null || !thread.isAlive()) {
-				skipRun = false;
-				startThread();
-			}
-		}
-		
-		private void startThread() {
-			thread = new Thread(new Runnable() {
-				public void run() {
-					while(!paused && running) {
-						event.run();
-						
-						if (skipRun) {
-							yeild();
-						}
 
-					}
-				}
-
-				//Thread.yield() was not sufficiently yielding.
-				private void yeild() {
-					try {
-						Thread.sleep(1);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			});
-			
-			thread.setPriority(priority);
-			thread.start();
+		public boolean isContinuous() {
+			return true;
 		}
-		
 	}
 
 	public synchronized boolean isRunning() {

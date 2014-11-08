@@ -28,7 +28,7 @@ public abstract class Strategy {
 		reset();
 	}
 	
-	public Branch nextBranch() {
+	public Branch nextBranch() throws Exception {
 		Branch branch = next();
 		
 		attempts++;
@@ -37,7 +37,7 @@ public abstract class Strategy {
 		return branch;
 	};
 	
-	protected abstract Branch next();
+	protected abstract Branch next() throws Exception;
 
 	public abstract void init();
 
