@@ -10,11 +10,11 @@ import cosc561.tsp.model.LightweightBranch;
 import cosc561.tsp.util.PartitionedQueue;
 import cosc561.tsp.view.MapWindow;
 
-public class UniformCost extends Strategy {
+public class BreadthFirstSearch extends Strategy {
 	
 	private static final int QUEUE_SIZE = 100000;
 	
-	public UniformCost(Graph graph, MapWindow window) {
+	public BreadthFirstSearch(Graph graph, MapWindow window) {
 		super(graph, window);
 	}
 

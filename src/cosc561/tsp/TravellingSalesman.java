@@ -25,7 +25,7 @@ public class TravellingSalesman {
 	
 	public static final Class<?>[] strategies = {
 		Greedy.class, 
-		UniformCost.class, 
+		BreadthFirstSearch.class, 
 		ClassHeuristic.class
 	};
 	
