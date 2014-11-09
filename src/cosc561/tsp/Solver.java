@@ -48,9 +48,7 @@ public class Solver extends Controls {
 		
 		scheduler.addEvent(scheduler.new ConcurrentEvent(true, 20, Thread.MAX_PRIORITY, new Runnable() {
 			public void run() {
-				if (strategy != null) {
-					strategy.updateStats();
-				}
+				updateStats();
 			}
 		}));
 		
@@ -58,7 +56,7 @@ public class Solver extends Controls {
 		
 		reset(TravellingSalesman.DEFAULT_STRATEGY, TravellingSalesman.DEFAULT_NODES);
 	}
-	
+
 	public void start() {
 		try {
 			scheduler.start();
@@ -78,6 +76,7 @@ public class Solver extends Controls {
 			stop();
 			return;
 		}
+		
 		try {
 			currentBranch = strategy.nextBranch();
 		} catch (Exception e) {
@@ -86,16 +85,22 @@ public class Solver extends Controls {
 		
 		if (manual) {
 			render();
-			strategy.updateStats();
+			updateStats();
 		}
 	}
-	
+
 	public void stop() {
 		scheduler.end();
 		currentBranch = strategy.getSolution();
 		window.render(currentBranch);
-		strategy.updateStats();
+		updateStats();
 		setPauseButton(true);
+	}
+	
+	protected void updateStats() {
+		if (strategy != null) {
+			strategy.updateStats(scheduler.getContinuousRunTime());
+		}
 	}
 	
 	public void changeStrategy(Class<? extends Strategy> strategyClass) {

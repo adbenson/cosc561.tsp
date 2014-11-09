@@ -32,6 +32,9 @@ public class EventScheduler {
 	
 	private LinkedList<Event> continuousEventList;
 	
+	private long lastStartTime;
+	private long continuousRunTime;
+	
 	/**
 	 * The number of cycles this scheduler has run without sleeping or yielding.
 	 * When this exceeds the given yieldAllowance, the scheulder will yield to avoid
@@ -145,6 +148,8 @@ public class EventScheduler {
 		else {
 			//Start the cycle
 			targetCycleStartTime = realTime();
+			lastStartTime = realTime();
+			continuousRunTime = 0;
 			running = true;
 			cycle();
 		}
@@ -161,6 +166,8 @@ public class EventScheduler {
 		else {
 			//End the cycle
 			running = false;
+			
+			continuousRunTime += realTime() - lastStartTime;
 		}
 	}
 	
@@ -169,7 +176,14 @@ public class EventScheduler {
 	 * @param pause whether or not you want the game to be paused
 	 */
 	public void setPaused(boolean pause) {
-		paused = pause;
+		paused = pause;		
+		
+		if (paused) {
+			continuousRunTime += realTime() - lastStartTime;
+		}
+		else {
+			lastStartTime = realTime();
+		}
 	}
 	
 	/**
@@ -181,6 +195,15 @@ public class EventScheduler {
 	
 	public boolean isPaused() {
 		return paused;
+	}
+	
+	public long getContinuousRunTime() {
+		if (paused || !running) {
+			return continuousRunTime;
+		}
+		else {
+			return continuousRunTime + (realTime() - lastStartTime);
+		}
 	}
 	
 	/**

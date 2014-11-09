@@ -64,8 +64,8 @@ public abstract class Strategy {
 		}
 	}
 	
-	public void updateStats() {
-		stats.update();
+	public void updateStats(long runTime) {
+		stats.update(runTime);
 	}
 	
 	public void reset() {
@@ -84,6 +84,7 @@ public abstract class Strategy {
 	private class Stats {
 		private Output attemptsOutput;
 		private Output currentDistanceOutput;
+		private Output continuousRunTimeOutput;
 		
 		public Stats(MapWindow window) {
 			window.clearOutput();
@@ -93,6 +94,9 @@ public abstract class Strategy {
 			
 			currentDistanceOutput = new Output("Current Distance");
 			window.addOutput(currentDistanceOutput);
+			
+			continuousRunTimeOutput = new Output("Running Time");
+			window.addOutput(continuousRunTimeOutput);
 		}
 		
 		public void reset() {
@@ -100,12 +104,13 @@ public abstract class Strategy {
 			currentDistanceOutput.setValue(0);
 		}
 		
-		public void update() {
+		public void update(final long runTime) {
 			try {
 				SwingUtilities.invokeAndWait(new Runnable() {
 					public void run() {
 						attemptsOutput.setValue(attempts);
 						currentDistanceOutput.setValue(currentDistance);
+						continuousRunTimeOutput.setValue(runTime);
 					}
 				});
 			} catch (InvocationTargetException | InterruptedException e) {
