@@ -3,8 +3,7 @@ package cosc561.tsp.strategy;
 import cosc561.tsp.Solver;
 import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.Node;
-import cosc561.tsp.model.branch.Branch;
-import cosc561.tsp.model.branch.PathBranch;
+import cosc561.tsp.model.branch.SparseBranch;
 import cosc561.tsp.model.branch.RichBranch;
 import cosc561.tsp.util.PartitionedQueue;
 import cosc561.tsp.view.MapWindow;
@@ -17,8 +16,8 @@ public class BreadthFirstSearch extends Strategy {
 		super(graph, window);
 	}
 
-	PartitionedQueue<Branch> branches;
-	PathBranch current;
+	PartitionedQueue<SparseBranch> branches;
+	RichBranch current;
 	
 	Solver solver;
 	
@@ -26,16 +25,16 @@ public class BreadthFirstSearch extends Strategy {
 		
 		branches = new PartitionedQueue<>(QUEUE_SIZE);
 		
-		current = new PathBranch(graph.getRoot(), graph.getNodes());
+		current = new RichBranch(graph.getRoot(), graph);
 	}
 
 	@Override
-	protected PathBranch next() {
+	protected RichBranch next() {
 		for(Node node : current.getUnvisited()) {
-			branches.add(new Branch(current, node));
+			branches.add(new SparseBranch(current, node));
 		}
 	
-		current = new PathBranch(branches.poll(), graph);
+		current = new RichBranch(branches.poll());
 		
 		return current;
 	}

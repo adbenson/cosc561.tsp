@@ -5,7 +5,6 @@ import java.util.Queue;
 
 import cosc561.tsp.Solver;
 import cosc561.tsp.model.Graph;
-import cosc561.tsp.model.branch.PathBranch;
 import cosc561.tsp.model.branch.RichBranch;
 import cosc561.tsp.view.MapWindow;
 
@@ -15,8 +14,8 @@ public class Greedy extends Strategy {
 		super(graph, window);
 	}
 
-	Queue<PathBranch> branches;
-	PathBranch current;
+	Queue<RichBranch> branches;
+	RichBranch current;
 	
 	Solver solver;
 	
@@ -24,12 +23,12 @@ public class Greedy extends Strategy {
 		
 		branches = new LinkedList<>();
 		
-		current = new PathBranch(graph.getRoot(), graph.getNodes());
+		current = new RichBranch(graph.getRoot(), graph);
 	}
 
 	@Override
-	protected PathBranch next() {
-		current = new PathBranch(current, current.getEnd().getNearest(current.getUnvisited()));
+	protected RichBranch next() {
+		current = new RichBranch(current, current.getEnd().getNearest(current.getUnvisited()));
 		
 		return current;
 	}

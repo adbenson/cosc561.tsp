@@ -17,7 +17,6 @@ import javax.swing.border.EtchedBorder;
 import cosc561.tsp.TravellingSalesman;
 import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.Node;
-import cosc561.tsp.model.branch.PathBranch;
 import cosc561.tsp.model.branch.RichBranch;
 
 public class MapWindow {
@@ -138,26 +137,25 @@ public class MapWindow {
 	}
 
 	public void render(RichBranch branch) {
+		List<Node> tour = branch.getTour();
 		
 		nodeList.removeAll();
-		for (Node n : branch.getPath()) {
+		for (Node n : tour) {
 			nodeList.add(new JLabel(n.toString()));
 		}
 		
 		graphics.initDraw();
 		
 		Node prev = null;
-		for (Node next : branch.getPath()) {
+		for (Node next : tour) {
 			if (prev != null) {
 				graphics.drawEdge(prev, next);
 			}
 			prev = next;
 		}
 		
-		drawNodes(branch.getPath());
-		if (branch instanceof PathBranch) {
-			drawNodes(((PathBranch)branch).getUnvisited());
-		}
+		drawNodes(tour);
+		drawNodes(branch.getUnvisited());
 		
 		graphics.display();
 	}

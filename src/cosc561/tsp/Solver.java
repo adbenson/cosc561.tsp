@@ -98,7 +98,7 @@ public class Solver extends Controls {
 		
 		System.out.println("Done!");
 		System.out.println("Distance: "+currentBranch.weight);
-		System.out.println("Path: "+currentBranch.getPath());
+		System.out.println("Path: "+currentBranch.getTour());
 		
 		setPauseButton(true);
 	}
