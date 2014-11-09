@@ -163,10 +163,8 @@ public class MapWindow {
 		graphics.display();
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-
-				
-				clearOutput();
-				nodeList.removeAll();
+//				clearOutput();
+//				nodeList.removeAll();
 			}
 		});
 
