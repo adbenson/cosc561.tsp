@@ -13,6 +13,8 @@ import cosc561.tsp.TravellingSalesman;
 import cosc561.tsp.model.Node;
 
 public class MapGraphics {
+	
+	private final int TEXT_OFFSET = 3;
 
 	private Graphics2D g;
 	private double scale;
@@ -67,9 +69,11 @@ public class MapGraphics {
 	public void drawNode(Node node) {
 		int x = ((int) (node.x * scale));
 		int y = ((int) ((TravellingSalesman.MAX_COORDS-node.y) * scale));
-		
+			
 		g.setColor(Color.BLACK);
 		g.fillOval(x, y, 5, 5);
+		
+		g.drawString(Integer.toString(node.id), x, y - TEXT_OFFSET);
 	}
 
 	public void drawEdge(Node n1, Node n2) {
