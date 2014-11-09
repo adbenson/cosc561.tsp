@@ -21,6 +21,7 @@ public class PathBranch extends RichBranch {
 		super(start);
 		
 		this.unvisited = new HashSet<>(unvisited);
+		this.unvisited.remove(start);
 		this.end = this.path.get(this.path.size() - 1);
 	}
 
