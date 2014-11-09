@@ -172,5 +172,22 @@ public class RichBranch extends SparseBranch {
 		
 		return edges;
 	}
+
+	public boolean wouldIntersect(Node node) {
+		if (path.size() < 3) {
+			return false;
+		}
+		
+		Edge newEdge = new Edge(end, node);
+		Edge closeEdge = new Edge(node, start);
+		
+		for (Edge edge : edges) {
+			if (newEdge.intersects(edge) || closeEdge.intersects(edge)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 	
 }
