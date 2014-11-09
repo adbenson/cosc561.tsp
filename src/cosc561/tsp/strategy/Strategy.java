@@ -34,7 +34,7 @@ public abstract class Strategy {
 		RichBranch branch = next();
 		
 		attempts++;
-		currentDistance = branch.weight;
+		currentDistance = getSolution().weight;
 		
 		return branch;
 	};
@@ -44,6 +44,8 @@ public abstract class Strategy {
 	public abstract void init();
 
 	public abstract boolean isComplete();
+		
+	public abstract RichBranch getSolution();
 		
 	public static Strategy instantiate(Class<? extends Strategy> strategyClass, Graph graph, MapWindow window) throws StrategyInstantiationException {
 		try {

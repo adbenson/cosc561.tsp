@@ -6,6 +6,7 @@ import java.util.Queue;
 import cosc561.tsp.Solver;
 import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.branch.PathBranch;
+import cosc561.tsp.model.branch.RichBranch;
 import cosc561.tsp.view.MapWindow;
 
 public class Greedy extends Strategy {
@@ -36,5 +37,10 @@ public class Greedy extends Strategy {
 	@Override
 	public boolean isComplete() {
 		return current.isComplete();
+	}
+
+	@Override
+	public RichBranch getSolution() {
+		return current;
 	}
 }

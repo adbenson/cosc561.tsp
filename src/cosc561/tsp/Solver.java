@@ -88,6 +88,7 @@ public class Solver extends Controls {
 	
 	public void stop() {
 		scheduler.end();
+		currentBranch = strategy.getSolution();
 		window.render(currentBranch);
 		strategy.updateStats();
 	}

@@ -5,6 +5,7 @@ import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.Node;
 import cosc561.tsp.model.branch.Branch;
 import cosc561.tsp.model.branch.PathBranch;
+import cosc561.tsp.model.branch.RichBranch;
 import cosc561.tsp.util.PartitionedQueue;
 import cosc561.tsp.view.MapWindow;
 
@@ -42,5 +43,10 @@ public class BreadthFirstSearch extends Strategy {
 	@Override
 	public boolean isComplete() {
 		return current.isComplete();
+	}
+
+	@Override
+	public RichBranch getSolution() {
+		return current;
 	}
 }
