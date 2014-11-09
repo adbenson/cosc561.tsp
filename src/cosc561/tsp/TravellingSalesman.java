@@ -7,7 +7,12 @@ import javax.swing.SwingUtilities;
 
 import cosc561.tsp.model.Node;
 import cosc561.tsp.model.NodeParser;
-import cosc561.tsp.strategy.*;
+import cosc561.tsp.strategy.BranchAndBoundPath;
+import cosc561.tsp.strategy.BranchAndBoundPermutation;
+import cosc561.tsp.strategy.BreadthFirstSearch;
+import cosc561.tsp.strategy.ClassHeuristic;
+import cosc561.tsp.strategy.Greedy;
+import cosc561.tsp.strategy.Strategy;
 import cosc561.tsp.view.MapWindow;
 
 public class TravellingSalesman {
@@ -23,7 +28,7 @@ public class TravellingSalesman {
 	
 	public static final int DEFAULT_NODES = 11;
 	public static final int MAX_NODES = 120;
-	public static final Class<? extends Strategy> DEFAULT_STRATEGY = BranchAndBoundPermutation.class;
+	public static final Class<? extends Strategy> DEFAULT_STRATEGY = BranchAndBoundPath.class;
 	
 	private MapWindow window;
 	
@@ -31,7 +36,8 @@ public class TravellingSalesman {
 		Greedy.class, 
 		BreadthFirstSearch.class, 
 		ClassHeuristic.class,
-		BranchAndBoundPermutation.class
+		BranchAndBoundPermutation.class,
+		BranchAndBoundPath.class
 	};
 	
 	public static void main(String[] args) throws Exception {	
