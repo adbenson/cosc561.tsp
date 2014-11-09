@@ -94,7 +94,6 @@ public abstract class Strategy {
 		}
 		
 		public void output(String label, double value) {
-			value = Math.round(value * 1000) / 1000.0;
 			outputs.put(label, value);
 		}
 		

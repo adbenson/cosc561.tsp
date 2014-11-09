@@ -6,6 +6,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.lang.reflect.InvocationTargetException;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -26,6 +27,9 @@ public class MapWindow {
 	
 	public static final int OUTPUT_WIDTH = 300;
 	public static final int NODE_LIST_WIDTH = 50;
+	
+	private static final String FORMAT_PATTERN = "###,###,###,###.###";
+	private static final DecimalFormat format = new DecimalFormat(FORMAT_PATTERN);
 	
 	private JFrame window;
 	
@@ -110,7 +114,9 @@ public class MapWindow {
 
 	public void addOutput(String label, Double value) {
 		outputPanel.add(new JLabel(label + ":"));
-		outputPanel.add(new JLabel(Double.toString(value)));
+		
+		String formatted = format.format(value);
+		outputPanel.add(new JLabel(formatted));
 	}
 	
 	public void refresh() {
