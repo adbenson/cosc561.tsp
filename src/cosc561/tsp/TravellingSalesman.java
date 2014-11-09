@@ -12,6 +12,8 @@ import cosc561.tsp.view.MapWindow;
 
 public class TravellingSalesman {
 	
+	public static final boolean DEBUG = true;
+	
 	public static final int DIMENSION = 700;
 	public static final int MAX_COORDS = 100;
 	public static final int SCALE = DIMENSION/MAX_COORDS;

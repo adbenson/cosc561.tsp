@@ -56,7 +56,7 @@ public class Solver extends Controls {
 		
 		window.setControls(this);
 		
-//		reset(TravellingSalesman.DEFAULT_STRATEGY, TravellingSalesman.DEFAULT_NODES);
+		reset(TravellingSalesman.DEFAULT_STRATEGY, TravellingSalesman.DEFAULT_NODES);
 	}
 	
 	public void start() {
@@ -70,6 +70,10 @@ public class Solver extends Controls {
 	}
 	
 	public void next(boolean manual) {
+		if (!scheduler.isRunning() && !manual) {
+			return;
+		}
+		
 		if (strategy.isComplete()) {
 			stop();
 			return;
@@ -91,6 +95,7 @@ public class Solver extends Controls {
 		currentBranch = strategy.getSolution();
 		window.render(currentBranch);
 		strategy.updateStats();
+		setPauseButton(true);
 	}
 	
 	public void changeStrategy(Class<? extends Strategy> strategyClass) {
@@ -103,8 +108,6 @@ public class Solver extends Controls {
 			e.printStackTrace();
 			System.exit(0);
 		}
-		
-		strategy.init();
 	}
 	
 	public void render() {
@@ -114,10 +117,19 @@ public class Solver extends Controls {
 	}
 	
 	@Override
-	public void reset() {
-		scheduler.end();
-			
+	public void reset(Class selectedStrategy, int nodes) {
+		if (scheduler.isRunning()) {
+			scheduler.end();
+		}
+		setPauseButton(true);
+		
+		nodeCap = nodes;
+		changeStrategy(selectedStrategy);
+		
+		strategy.reset();
 		strategy.init();
+		
+		window.reset();
 	}
 
 	@Override
