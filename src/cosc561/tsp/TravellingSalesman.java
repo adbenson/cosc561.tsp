@@ -23,7 +23,7 @@ public class TravellingSalesman {
 	
 	public static final int DEFAULT_NODES = 11;
 	public static final int MAX_NODES = 120;
-	public static final Class<? extends Strategy> DEFAULT_STRATEGY = BranchAndBound.class;
+	public static final Class<? extends Strategy> DEFAULT_STRATEGY = BranchAndBoundPermutation.class;
 	
 	private MapWindow window;
 	
@@ -31,7 +31,7 @@ public class TravellingSalesman {
 		Greedy.class, 
 		BreadthFirstSearch.class, 
 		ClassHeuristic.class,
-		BranchAndBound.class
+		BranchAndBoundPermutation.class
 	};
 	
 	public static void main(String[] args) throws Exception {	
