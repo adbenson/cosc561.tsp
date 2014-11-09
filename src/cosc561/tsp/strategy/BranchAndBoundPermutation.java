@@ -41,7 +41,7 @@ public class BranchAndBoundPermutation extends Strategy {
 		
 		rejected.setValue(0);
 	}
-int i=0;
+
 	@Override
 	protected RichBranch next() {
 		
@@ -63,7 +63,7 @@ int i=0;
 		else {
 			permutationsInProgress.addAll(current.getPermutations());		
 		}
-		if (i++%50000==0) System.out.println(permutationsInProgress.size());
+
 		return current;
 	}
 
