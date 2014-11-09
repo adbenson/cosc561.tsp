@@ -8,7 +8,7 @@ import cosc561.tsp.model.branch.RichBranch;
 import cosc561.tsp.util.PartitionedQueue;
 import cosc561.tsp.view.MapWindow;
 
-public class ClassHeuristic extends Strategy {
+public class BreadthFirstClassHeuristic extends Strategy {
 	
 	private static final int QUEUE_SIZE = 100000;
 
@@ -17,7 +17,7 @@ public class ClassHeuristic extends Strategy {
 	
 	private int rejected;
 	
-	public ClassHeuristic(Graph graph, MapWindow window) {
+	public BreadthFirstClassHeuristic(Graph graph, MapWindow window) {
 		super(graph, window);
 	}
 	
