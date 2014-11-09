@@ -75,6 +75,6 @@ public class Node {
 	}
 	
 	public String toString() {
-		return "("+x+", "+y+")";
+		return id+":"+x+","+y+"";
 	}
 }
