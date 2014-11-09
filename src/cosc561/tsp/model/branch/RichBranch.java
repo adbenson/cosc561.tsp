@@ -69,7 +69,8 @@ public class RichBranch extends SparseBranch {
 		this.path = new ArrayList<>(that.path);
 		this.path.add(visit);
 		
-		this.edges = buildEdges(this.path);
+		this.edges = new ArrayList<>(that.edges);
+		this.edges.add(new Edge(that.end, visit));
 		
 		this.start = that.start;
 		this.end = visit;
@@ -160,9 +161,11 @@ public class RichBranch extends SparseBranch {
 			return edges;
 		}
 		
-		Node previous = path.get(path.size() - 1);
+		Node previous = null;
 		for (Node node : path) {
-			edges.add(new Edge(previous, node));
+			if (previous != null) {
+				edges.add(new Edge(previous, node));
+			}
 			
 			previous = node;
 		}
