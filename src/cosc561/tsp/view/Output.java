@@ -60,8 +60,7 @@ public class Output {
 
 	public void setValue(float val) {
 		double rounded = Math.round(val * 100) / 100.0;
-		setValue(Double.toString(rounded));
+		setFieldValue(Double.toString(rounded));
 	}
 	
-
 }

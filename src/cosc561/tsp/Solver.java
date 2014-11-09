@@ -19,7 +19,7 @@ public class Solver extends Controls {
 	private Strategy strategy;
 	
 	private List<Node> allNodes;
-	private int nodeCap = 20;
+	private int nodeCap = TravellingSalesman.DEFAULT_NODES;
 	
 	private volatile RichBranch currentBranch;
 	
@@ -56,7 +56,7 @@ public class Solver extends Controls {
 		
 		window.setControls(this);
 		
-		changeStrategy(TravellingSalesman.DEFAULT_STRATEGY);
+//		reset(TravellingSalesman.DEFAULT_STRATEGY, TravellingSalesman.DEFAULT_NODES);
 	}
 	
 	public void start() {

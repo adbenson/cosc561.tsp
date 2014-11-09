@@ -19,14 +19,17 @@ public class TravellingSalesman {
 	public static final int FPS = 2;
 	public static final int TOLERANCE = 10;
 	
-	public static final Class<? extends Strategy> DEFAULT_STRATEGY = ClassHeuristic.class;
+	public static final int DEFAULT_NODES = 11;
+	public static final int MAX_NODES = 120;
+	public static final Class<? extends Strategy> DEFAULT_STRATEGY = BranchAndBound.class;
 	
 	private MapWindow window;
 	
 	public static final Class<?>[] strategies = {
 		Greedy.class, 
 		BreadthFirstSearch.class, 
-		ClassHeuristic.class
+		ClassHeuristic.class,
+		BranchAndBound.class
 	};
 	
 	public static void main(String[] args) throws Exception {	

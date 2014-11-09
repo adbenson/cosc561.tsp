@@ -25,15 +25,16 @@ public class MapWindow {
 	public static final Color BACKGROUND = Color.WHITE;
 	
 	public static final int OUTPUT_WIDTH = 300;
+	public static final int NODE_LIST_WIDTH = 50;
 	
 	private JFrame window;
-	private Controls controls;
 	
 	private Container graphPanel;
 	private MapGraphics graphics;
 	
 	private JPanel outputPanel;
 	private JPanel controlPanel;
+	private JPanel nodeList;
 	private Container content;
 	
 	public MapWindow(Dimension dimensions) {
@@ -44,9 +45,19 @@ public class MapWindow {
 		content = window.getContentPane();
 		content.setLayout(new BorderLayout());
 		
+		JPanel graphContainer = new JPanel(new BorderLayout());
+		
 		graphPanel = new JPanel();
 		graphPanel.setPreferredSize(dimensions);
-		content.add(graphPanel, BorderLayout.CENTER);
+		graphContainer.add(graphPanel, BorderLayout.CENTER);
+		
+		nodeList = new JPanel();
+		nodeList.setPreferredSize(new Dimension(NODE_LIST_WIDTH, 0));
+		nodeList.setLayout(new GridLayout(0, 1));
+		nodeList.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+		graphContainer.add(nodeList, BorderLayout.EAST);
+		
+		content.add(graphContainer, BorderLayout.CENTER);
 		
 		controlPanel = createControlPanel();		
 		content.add(controlPanel, BorderLayout.SOUTH);
@@ -94,6 +105,10 @@ public class MapWindow {
 		return controlPanel;
 	}
 	
+	public void clearOutput() {
+		outputPanel.removeAll();
+	}
+	
 	public void addOutput(Output output) {
 		outputPanel.add(new JLabel(output.getLabel() + ":"));
 		outputPanel.add(output.getField());
@@ -119,6 +134,12 @@ public class MapWindow {
 	}
 
 	public void render(RichBranch branch) {
+		
+		nodeList.removeAll();
+		for (Node n : branch.getPath()) {
+			nodeList.add(new JLabel(n.toString()));
+		}
+		
 		graphics.initDraw();
 		
 		Node prev = null;
@@ -135,6 +156,20 @@ public class MapWindow {
 		}
 		
 		graphics.display();
+	}
+
+	public void reset() {
+		graphics.initDraw();
+		graphics.display();
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+
+				
+				clearOutput();
+				nodeList.removeAll();
+			}
+		});
+
 	}
 
 }

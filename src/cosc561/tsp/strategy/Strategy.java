@@ -82,15 +82,12 @@ public abstract class Strategy {
 	private class Stats {
 		private Output attemptsOutput;
 		private Output currentDistanceOutput;
-		private Output pathsPerSecond;
 		
 		public Stats(MapWindow window) {
+			window.clearOutput();
 			
 			attemptsOutput = new Output("Attempted Paths");
 			window.addOutput(attemptsOutput);
-			
-			pathsPerSecond = new Output("Paths per Second");
-			window.addOutput(pathsPerSecond);
 			
 			currentDistanceOutput = new Output("Current Distance");
 			window.addOutput(currentDistanceOutput);
@@ -107,7 +104,6 @@ public abstract class Strategy {
 					public void run() {
 						attemptsOutput.setValue(attempts);
 						currentDistanceOutput.setValue(currentDistance);
-//						pathsPerSecond.setValue(attempts);
 					}
 				});
 			} catch (InvocationTargetException | InterruptedException e) {
