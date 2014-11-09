@@ -68,6 +68,7 @@ public class Solver extends Controls {
 	}
 	
 	public void next(boolean manual) {
+		//scheduler doesn't stop on a dime; it may call this a few more times after it's supposed to stop.
 		if (!scheduler.isRunning() && !manual) {
 			return;
 		}
@@ -94,6 +95,11 @@ public class Solver extends Controls {
 		currentBranch = strategy.getSolution();
 		window.render(currentBranch);
 		updateStats();
+		
+		System.out.println("Done!");
+		System.out.println("Distance: "+currentBranch.weight);
+		System.out.println("Path: "+currentBranch.getPath());
+		
 		setPauseButton(true);
 	}
 	
