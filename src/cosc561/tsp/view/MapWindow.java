@@ -6,6 +6,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -61,10 +62,9 @@ public class MapWindow {
 		controlPanel = createControlPanel();		
 		content.add(controlPanel, BorderLayout.SOUTH);
 		
-		
 		outputPanel = createOutputPanel();
 		content.add(outputPanel, BorderLayout.EAST);
-				
+
 		window.pack();
 		window.setVisible(true);
 		
@@ -165,8 +165,9 @@ public class MapWindow {
 		graphics.display();
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-//				clearOutput();
-//				nodeList.removeAll();
+				clearOutput();
+				nodeList.removeAll();
+				refresh();
 			}
 		});
 

@@ -8,8 +8,6 @@ import java.util.Map.Entry;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-import javax.naming.OperationNotSupportedException;
-
 public class PartitionedQueue<Element extends Partitionable & Comparable<Element>> implements Queue<Element> {
 	
 	private int defaultPartitionSize;
