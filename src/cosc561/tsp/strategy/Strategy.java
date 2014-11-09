@@ -2,21 +2,22 @@ package cosc561.tsp.strategy;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.SwingUtilities;
 
 import cosc561.tsp.TravellingSalesman;
 import cosc561.tsp.model.Graph;
-import cosc561.tsp.model.branch.PathBranch;
 import cosc561.tsp.model.branch.RichBranch;
 import cosc561.tsp.view.MapWindow;
-import cosc561.tsp.view.Output;
 
 public abstract class Strategy {
 	
 	protected Graph graph;
 	protected MapWindow window;
-	private Stats stats;
+	public final Stats stats;
 	
 	private volatile long attempts;
 	protected volatile float currentDistance;
@@ -34,7 +35,7 @@ public abstract class Strategy {
 		RichBranch branch = next();
 		
 		attempts++;
-		currentDistance = getSolution().weight;
+		currentDistance = branch.weight;
 		
 		return branch;
 	};
@@ -64,8 +65,9 @@ public abstract class Strategy {
 		}
 	}
 	
-	public void updateStats(long runTime) {
-		stats.update(runTime);
+	public void updateStats() {
+		stats.output("Attempted Paths", attempts);
+		stats.output("Current Distance", currentDistance);
 	}
 	
 	public void reset() {
@@ -81,36 +83,38 @@ public abstract class Strategy {
 		}
 	}
 	
-	private class Stats {
-		private Output attemptsOutput;
-		private Output currentDistanceOutput;
-		private Output continuousRunTimeOutput;
+	public class Stats {
+		
+		private Map<String, Double> outputs;
+		private MapWindow window;
 		
 		public Stats(MapWindow window) {
-			window.clearOutput();
-			
-			attemptsOutput = new Output("Attempted Paths");
-			window.addOutput(attemptsOutput);
-			
-			currentDistanceOutput = new Output("Current Distance");
-			window.addOutput(currentDistanceOutput);
-			
-			continuousRunTimeOutput = new Output("Running Time");
-			window.addOutput(continuousRunTimeOutput);
+			outputs = new HashMap<String, Double>();
+			this.window = window;
+		}
+		
+		public void output(String label, double value) {
+			value = Math.round(value * 1000) / 1000.0;
+			outputs.put(label, value);
 		}
 		
 		public void reset() {
-			attemptsOutput.setValue(0);
-			currentDistanceOutput.setValue(0);
+			window.clearOutput();
+			window.refresh();
 		}
 		
-		public void update(final long runTime) {
+		public void show() {
 			try {
 				SwingUtilities.invokeAndWait(new Runnable() {
 					public void run() {
-						attemptsOutput.setValue(attempts);
-						currentDistanceOutput.setValue(currentDistance);
-						continuousRunTimeOutput.setValue(runTime);
+						updateStats();
+						window.clearOutput();
+						
+						for (Entry<String, Double> entry : outputs.entrySet()) {
+							window.addOutput(entry.getKey(), entry.getValue());
+						}
+						
+						window.refresh();
 					}
 				});
 			} catch (InvocationTargetException | InterruptedException e) {

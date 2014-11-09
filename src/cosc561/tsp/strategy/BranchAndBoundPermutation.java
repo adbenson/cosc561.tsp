@@ -14,7 +14,7 @@ public class BranchAndBoundPermutation extends Strategy {
 	
 	private static final int QUEUE_SIZE = 100000;
 
-	private Output rejected;
+	private int rejected;
 
 	private Queue<Branch> permutationsInProgress;
 	
@@ -24,9 +24,6 @@ public class BranchAndBoundPermutation extends Strategy {
 	
 	public BranchAndBoundPermutation(Graph graph, MapWindow window) {
 		super(graph, window);
-		
-		rejected = new Output("Rejected candidates", 500);
-		window.addOutput(rejected);
 	}
 	
 	public void init() {
@@ -39,7 +36,7 @@ public class BranchAndBoundPermutation extends Strategy {
 
 		permutationsInProgress.add(bestTour);
 		
-		rejected.setValue(0);
+		rejected = 0;
 	}
 
 	@Override
@@ -56,7 +53,7 @@ public class BranchAndBoundPermutation extends Strategy {
 				System.out.println(permutationsInProgress.size());
 			}
 			else {
-				rejected.increment();
+				rejected++;
 			}
 				
 		}
@@ -65,6 +62,12 @@ public class BranchAndBoundPermutation extends Strategy {
 		}
 
 		return current;
+	}
+	
+	@Override
+	public void updateStats() {
+		super.updateStats();
+		stats.output("Rejected Paths", rejected);
 	}
 
 	@Override

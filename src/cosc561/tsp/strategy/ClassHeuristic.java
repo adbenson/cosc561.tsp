@@ -8,7 +8,6 @@ import cosc561.tsp.model.branch.PathBranch;
 import cosc561.tsp.model.branch.RichBranch;
 import cosc561.tsp.util.PartitionedQueue;
 import cosc561.tsp.view.MapWindow;
-import cosc561.tsp.view.Output;
 
 public class ClassHeuristic extends Strategy {
 	
@@ -17,13 +16,10 @@ public class ClassHeuristic extends Strategy {
 	PartitionedQueue<Branch> branches;
 	PathBranch current;
 	
-	private Output rejected;
+	private int rejected;
 	
 	public ClassHeuristic(Graph graph, MapWindow window) {
 		super(graph, window);
-		
-		rejected = new Output("Rejected candidates", 500);
-		window.addOutput(rejected);
 	}
 	
 	public void init() {
@@ -32,7 +28,7 @@ public class ClassHeuristic extends Strategy {
 		
 		current = new PathBranch(graph.getRoot(), graph.getNodes());
 		
-		rejected.setValue(0);
+		rejected = 0;
 	}
 
 	@Override
@@ -42,7 +38,7 @@ public class ClassHeuristic extends Strategy {
 				branches.add(new Branch(current, node));
 			}
 			else {
-				rejected.increment();
+				rejected++;
 				Thread.yield();
 			}
 		}
@@ -53,6 +49,12 @@ public class ClassHeuristic extends Strategy {
 		}
 		
 		return current;
+	}
+	
+	@Override
+	public void updateStats() {
+		super.updateStats();
+		stats.output("Rejected Paths", rejected);
 	}
 
 	private boolean nonIntersecting(PathBranch branch, Node node) {

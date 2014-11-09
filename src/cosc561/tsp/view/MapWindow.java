@@ -108,10 +108,14 @@ public class MapWindow {
 	public void clearOutput() {
 		outputPanel.removeAll();
 	}
+
+	public void addOutput(String label, Double value) {
+		outputPanel.add(new JLabel(label + ":"));
+		outputPanel.add(new JLabel(Double.toString(value)));
+	}
 	
-	public void addOutput(Output output) {
-		outputPanel.add(new JLabel(output.getLabel() + ":"));
-		outputPanel.add(output.getField());
+	public void refresh() {
+		window.pack();
 	}
 
 	public void drawComplete(Graph graph) {

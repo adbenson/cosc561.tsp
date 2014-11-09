@@ -105,7 +105,8 @@ public class Solver extends Controls {
 	
 	protected void updateStats() {
 		if (strategy != null) {
-			strategy.updateStats(scheduler.getContinuousRunTime());
+			strategy.stats.output("Running Time", scheduler.getContinuousRunTime());
+			strategy.stats.show();
 		}
 	}
 	
