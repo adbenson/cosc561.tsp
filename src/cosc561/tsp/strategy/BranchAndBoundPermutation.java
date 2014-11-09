@@ -4,10 +4,9 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 import cosc561.tsp.model.Graph;
-import cosc561.tsp.model.branch.SparseBranch;
 import cosc561.tsp.model.branch.RichBranch;
+import cosc561.tsp.model.branch.SparseBranch;
 import cosc561.tsp.view.MapWindow;
-import cosc561.tsp.view.Output;
 
 public class BranchAndBoundPermutation extends Strategy {
 	
