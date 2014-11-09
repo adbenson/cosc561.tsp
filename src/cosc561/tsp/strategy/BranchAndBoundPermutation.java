@@ -4,23 +4,22 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 import cosc561.tsp.model.Graph;
-import cosc561.tsp.model.branch.Branch;
+import cosc561.tsp.model.branch.SparseBranch;
 import cosc561.tsp.model.branch.RichBranch;
-import cosc561.tsp.model.branch.TourBranch;
 import cosc561.tsp.view.MapWindow;
 import cosc561.tsp.view.Output;
 
 public class BranchAndBoundPermutation extends Strategy {
 	
-	private static final int QUEUE_SIZE = 100000;
+	private static final int QUEUE_SIZE = 1000;
 
 	private int rejected;
 
-	private Queue<Branch> permutationsInProgress;
+	private Queue<SparseBranch> permutationsInProgress;
 	
-	private Branch bestTour;
+	private SparseBranch bestTour;
 	
-	private TourBranch current;
+	private RichBranch current;
 	
 	public BranchAndBoundPermutation(Graph graph, MapWindow window) {
 		super(graph, window);
@@ -28,11 +27,11 @@ public class BranchAndBoundPermutation extends Strategy {
 	
 	public void init() {
 		
-		permutationsInProgress = new PriorityQueue<>(1000);
+		permutationsInProgress = new PriorityQueue<>(QUEUE_SIZE);
 		
 		//Naieve first candidate, just grab all nodes.
 		//This can be improved by heuristic
-		bestTour = new TourBranch(graph.getNodeList());
+		bestTour = new RichBranch(graph.getNodeList(), graph);
 
 		permutationsInProgress.add(bestTour);
 		
@@ -42,9 +41,9 @@ public class BranchAndBoundPermutation extends Strategy {
 	@Override
 	protected RichBranch next() {
 		
-		current = new TourBranch(permutationsInProgress.poll(), graph);
+		current = new RichBranch(permutationsInProgress.poll());
 		
-		if (current.isComplete()) {
+		if (current.isPermutationComplete()) {
 				
 			if (current.weight < bestTour.weight) {
 				bestTour = current;
@@ -77,6 +76,6 @@ public class BranchAndBoundPermutation extends Strategy {
 
 	@Override
 	public RichBranch getSolution() {
-		return new TourBranch(bestTour, graph);
+		return new RichBranch(bestTour);
 	}
 }
