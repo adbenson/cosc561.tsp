@@ -1,5 +1,6 @@
 package cosc561.tsp.model.branch;
 
+import java.util.Comparator;
 import java.util.List;
 
 import cosc561.tsp.model.Graph;
@@ -7,6 +8,7 @@ import cosc561.tsp.model.Node;
 import cosc561.tsp.util.Partitionable;
 
 public class SparseBranch implements Comparable<SparseBranch>, Partitionable {
+
 	private static final float PARITION_DIVISOR = 100f;
 	private static final int PARTITION_FACTOR = 3;
 	
@@ -172,5 +174,14 @@ public class SparseBranch implements Comparable<SparseBranch>, Partitionable {
 	@Override
 	public int getPartition() {
 		return (int) this.weight / 100;//Math.pow(this.weight / PARITION_DIVISOR, PARTITION_FACTOR);
+	}
+	
+	public static class ReverseComparator implements Comparator<SparseBranch> {
+
+		@Override
+		public int compare(SparseBranch a, SparseBranch b) {
+			return - (a.compareTo(b));
+		}
+		
 	}
 }
