@@ -85,15 +85,23 @@ public abstract class Strategy {
 	
 	public class Stats {
 		
-		private Map<String, Double> outputs;
+		private Map<String, String> outputs;
 		private MapWindow window;
 		
 		public Stats(MapWindow window) {
-			outputs = new HashMap<String, Double>();
+			outputs = new HashMap<String, String>();
 			this.window = window;
 		}
 		
+		public void output(String label, long value) {
+			outputs.put(label, Long.toString(value));
+		}
+		
 		public void output(String label, double value) {
+			outputs.put(label, MapWindow.DECIMAL_FORMAT.format(value));
+		}
+
+		public void output(String label, String value) {
 			outputs.put(label, value);
 		}
 		
@@ -109,7 +117,7 @@ public abstract class Strategy {
 						updateStats();
 						window.clearOutput();
 						
-						for (Entry<String, Double> entry : outputs.entrySet()) {
+						for (Entry<String, String> entry : outputs.entrySet()) {
 							window.addOutput(entry.getKey(), entry.getValue());
 						}
 						

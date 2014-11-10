@@ -12,7 +12,7 @@ public class BranchAndBoundPermutation extends Strategy {
 	
 	private static final int QUEUE_SIZE = 1000;
 
-	private int rejected;
+	private long rejected;
 
 	private Queue<SparseBranch> permutationsInProgress;
 	

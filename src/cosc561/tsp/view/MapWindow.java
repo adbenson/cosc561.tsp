@@ -7,7 +7,9 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -29,7 +31,7 @@ public class MapWindow {
 	public static final int NODE_LIST_WIDTH = 70;
 	
 	private static final String FORMAT_PATTERN = "###,###,###,###.###";
-	private static final DecimalFormat format = new DecimalFormat(FORMAT_PATTERN);
+	public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat(FORMAT_PATTERN);
 	
 	private JFrame window;
 	
@@ -112,11 +114,9 @@ public class MapWindow {
 		outputPanel.removeAll();
 	}
 
-	public void addOutput(String label, Double value) {
+	public void addOutput(String label, String value) {
 		outputPanel.add(new JLabel(label + ":"));
-		
-		String formatted = format.format(value);
-		outputPanel.add(new JLabel(formatted));
+		outputPanel.add(new JLabel(value));
 	}
 	
 	public void refresh() {
@@ -178,6 +178,18 @@ public class MapWindow {
 		});
 
 	}
+	
+	/*
+	 * Thanks to Jarrod Roberson
+	 * http://stackoverflow.com/questions/6710094/how-to-format-an-elapsed-time-interval-in-hhmmss-sss-format-in-java
+	 */
+    public static String formatTimeInterval(final long l) {
+        final long hr = TimeUnit.MILLISECONDS.toHours(l);
+        final long min = TimeUnit.MILLISECONDS.toMinutes(l - TimeUnit.HOURS.toMillis(hr));
+        final long sec = TimeUnit.MILLISECONDS.toSeconds(l - TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min));
+        final long ms = TimeUnit.MILLISECONDS.toMillis(l - TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min) - TimeUnit.SECONDS.toMillis(sec));
+        return String.format("%02d:%02d:%02d.%03d", hr, min, sec, ms);
+    }
 
 }
 

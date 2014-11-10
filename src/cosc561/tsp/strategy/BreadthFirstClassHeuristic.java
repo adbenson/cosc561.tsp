@@ -15,7 +15,7 @@ public class BreadthFirstClassHeuristic extends Strategy {
 	private PartitionedQueue<SparseBranch> branches;
 	private RichBranch current;
 	
-	private int rejected;
+	private long rejected;
 	
 	public BreadthFirstClassHeuristic(Graph graph, MapWindow window) {
 		super(graph, window);
