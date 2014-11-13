@@ -1,4 +1,4 @@
-package cosc561.tsp.strategy;
+package cosc561.tsp.strategy.path_generation;
 
 import java.awt.Polygon;
 import java.util.ArrayList;
@@ -11,6 +11,7 @@ import cosc561.tsp.model.Edge;
 import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.Node;
 import cosc561.tsp.model.branch.RichBranch;
+import cosc561.tsp.strategy.Strategy;
 import cosc561.tsp.view.MapWindow;
 
 public class ConvexHull extends Strategy {

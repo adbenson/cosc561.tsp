@@ -1,4 +1,4 @@
-package cosc561.tsp.strategy;
+package cosc561.tsp.strategy.path_generation;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -6,6 +6,7 @@ import java.util.Queue;
 import cosc561.tsp.Solver;
 import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.branch.RichBranch;
+import cosc561.tsp.strategy.Strategy;
 import cosc561.tsp.view.MapWindow;
 
 public class Greedy extends Strategy {
