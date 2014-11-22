@@ -105,8 +105,8 @@ public class UniformCost extends Strategy {
 				if (!frontier.containsEndNode(n)) {
 					frontier.add(next);
 				}
-				else if (frontier.get(n).getWeight() > next.getWeight()) {
-					frontier.add(next);
+				else if (frontier.get(n).weight > next.weight) {
+					frontier.add(new SparseBranch(next));
 				}
 			}
 		}
@@ -117,5 +117,10 @@ public class UniformCost extends Strategy {
 	@Override
 	public boolean isComplete() {
 		return current.isComplete();
+	}
+
+	@Override
+	public RichBranch getSolution() {
+		return current;
 	}
 }

@@ -6,6 +6,7 @@ import java.util.Queue;
 import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.branch.RichBranch;
 import cosc561.tsp.model.branch.SparseBranch;
+import cosc561.tsp.strategy.tour_generation.WorstFirstInsertion;
 import cosc561.tsp.view.MapWindow;
 
 public class BranchAndBoundPermutation extends Strategy {
@@ -24,13 +25,13 @@ public class BranchAndBoundPermutation extends Strategy {
 		super(graph, window);
 	}
 	
-	public void init() {
+	public void init() throws Exception {
 		
 		permutationsInProgress = new PriorityQueue<>(QUEUE_SIZE);
 		
 		//Naieve first candidate, just grab all nodes.
 		//This can be improved by heuristic
-		bestTour = new RichBranch(graph.getNodeList(), graph);
+		bestTour = new WorstFirstInsertion(graph, window).generate();
 
 		permutationsInProgress.add(bestTour);
 		

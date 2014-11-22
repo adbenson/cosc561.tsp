@@ -81,7 +81,7 @@ public class Solver extends Controls {
 		} catch (Exception e) {
 			throw new RuntimeException("Exception encountered getting next branch", e);
 		}
-		
+		currentBranch = strategy.getSolution();
 		if (manual) {
 			render();
 			updateStats();
@@ -140,6 +140,7 @@ public class Solver extends Controls {
 		strategy.init();
 		
 		window.reset();
+		window.render(strategy.getSolution());
 	}
 
 	@Override

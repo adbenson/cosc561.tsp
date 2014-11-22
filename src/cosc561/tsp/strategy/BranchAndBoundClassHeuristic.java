@@ -7,6 +7,7 @@ import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.Node;
 import cosc561.tsp.model.branch.RichBranch;
 import cosc561.tsp.model.branch.SparseBranch;
+import cosc561.tsp.strategy.tour_generation.WorstFirstInsertion;
 import cosc561.tsp.view.MapWindow;
 
 public class BranchAndBoundClassHeuristic extends Strategy {
@@ -32,7 +33,12 @@ public class BranchAndBoundClassHeuristic extends Strategy {
 		
 		//Naieve first candidate, just grab all nodes.
 		//This can be improved by heuristic
-		bestTour = new RichBranch(graph.getNodeList(), graph);
+		try {
+			bestTour = new WorstFirstInsertion(graph, window).generate();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		pathsInProgress.add(new RichBranch(graph.getRoot(), graph));
 		
@@ -59,7 +65,7 @@ public class BranchAndBoundClassHeuristic extends Strategy {
 		}
 		else {
 			for (Node node : current.getUnvisited()) {
-				if (!current.wouldIntersect(node)) {
+				if (!current.getPath().wouldIntersect(node)) {
 					RichBranch tour = new RichBranch(current, node);
 					
 					if (tour.weight < bestTour.weight) {
