@@ -1,10 +1,10 @@
 package cosc561.tsp.model.branch;
 
 import java.util.Comparator;
-import java.util.List;
 
 import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.Node;
+import cosc561.tsp.model.Path;
 import cosc561.tsp.util.Partitionable;
 
 public class SparseBranch implements Comparable<SparseBranch>, Partitionable {
@@ -66,7 +66,7 @@ public class SparseBranch implements Comparable<SparseBranch>, Partitionable {
 	 * @param start
 	 * @param path 
 	 */
-	protected SparseBranch(List<Node> path, Graph graph) {
+	protected SparseBranch(Path path, Graph graph) {
 		this.path = sparsePath(path);
 		
 		this.weight = calculateWeight(this.path, graph);
@@ -82,7 +82,7 @@ public class SparseBranch implements Comparable<SparseBranch>, Partitionable {
 //	 * 
 //	 * @param start
 //	 */
-//	protected Branch(List<Node> path, float weight, int pivot) {
+//	protected Branch(Path path, float weight, int pivot) {
 //		this(sparsePath(path), weight, pivot);
 //	}
 
@@ -112,7 +112,7 @@ public class SparseBranch implements Comparable<SparseBranch>, Partitionable {
 //	public Branch(PathBranch that, Node node, float weight) {
 //		this.weight = weight;
 //
-//		List<Node> oldPath = that.getPath();
+//		Path oldPath = that.getPath();
 //		oldPath.add(node);
 //		this.path = sparsePath(oldPath);
 //		
@@ -141,7 +141,7 @@ public class SparseBranch implements Comparable<SparseBranch>, Partitionable {
 		return out;
 	}
 	
-	private static byte[] sparsePath(List<Node> path) {
+	private static byte[] sparsePath(Path path) {
 		byte[] nodes = new byte[path.size()];
 		
 		for (int i = 0; i < nodes.length; i++) {

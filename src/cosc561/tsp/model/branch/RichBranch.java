@@ -1,6 +1,6 @@
 package cosc561.tsp.model.branch;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -8,14 +8,11 @@ import java.util.Set;
 import cosc561.tsp.model.Edge;
 import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.Node;
+import cosc561.tsp.model.Path;
 
 public class RichBranch extends SparseBranch {
 
-	protected final List<Node> path;
-	protected final List<Edge> edges;
-
-	protected final Node start;
-	protected final Node end;
+	protected final Path path;
 	
 	protected final Set<Node> unvisited;
 
@@ -28,31 +25,30 @@ public class RichBranch extends SparseBranch {
 	public RichBranch(Node start, Graph graph) {
 		super(start, graph);
 		
-		this.path = new ArrayList<Node>();
+		this.path = new Path();
 		this.path.add(start);
-		
-		this.edges = new ArrayList<>();
-		
-		this.start = start;
-		this.end = start;
 		
 		this.unvisited = new HashSet<>(graph.getNodes());
 		this.unvisited.remove(start);
 	}
 	
 	/**
+	 * Generic path constructor
+	 * @param graph
+	 */
+	public RichBranch(Collection<Node> path, Graph graph) {
+		this(new Path(path), graph);
+	}
+
+	
+	/**
 	 * Initial Tour Constructor
 	 * @param graph
 	 */
-	public RichBranch(List<Node> path, Graph graph) {
+	public RichBranch(Path path, Graph graph) {
 		super(path, graph);
 		
-		this.path = new ArrayList<>(path);
-		
-		this.edges = buildEdges(this.path);
-		
-		this.start = this.path.get(0);
-		this.end = this.path.get(this.path.size() - 1);
+		this.path = new Path(path);
 		
 		this.unvisited = new HashSet<>(graph.getNodesNotIn(this.path));
 	}
@@ -66,15 +62,9 @@ public class RichBranch extends SparseBranch {
 	public RichBranch(RichBranch that, Node visit) {
 		super(that, visit);
 
-		this.path = new ArrayList<>(that.path);
+		this.path = new Path(that.path);
 		this.path.add(visit);
-		
-		this.edges = new ArrayList<>(that.edges);
-		this.edges.add(new Edge(that.end, visit));
-		
-		this.start = that.start;
-		this.end = visit;
-		
+
 		this.unvisited = new HashSet<>(that.unvisited);
 		this.unvisited.remove(visit);
 	}
@@ -88,48 +78,25 @@ public class RichBranch extends SparseBranch {
 	public RichBranch(SparseBranch that) {
 		super(that);
 		
-		this.path = nodePath(that.path, graph);
-		
-		this.edges = buildEdges(this.path);
-		
-		this.start = this.path.get(0);
-		this.end = this.path.get(this.path.size() - 1);
-		
+		this.path = new Path(that.path, that.graph);
+
 		this.unvisited = new HashSet<>(graph.getNodesNotIn(this.path));
-	}
-	
-	private static List<Node> initPath(Node start, List<Node> path) {
-		List<Node> newPath;
-		
-		if (path == null || path.isEmpty()) {
-			newPath = new ArrayList<>();
-			newPath.add(start);
-		}
-		else {
-			newPath = new ArrayList<>(path);
-		}
-		
-		return newPath;
 	}
 
 	public boolean isComplete() {
 		return unvisited.isEmpty();
 	}
 	
-	protected List<Node> getPath() {
-		return new ArrayList<>(path);
+	public Path getPath() {
+		return new Path(path);
 	}
 	
-	public List<Node> getTour() {
-		List<Node> tour = getPath();
-		if (tour.size() > 1) {
-			tour.add(start);
-		}
-		return tour;
+	public Path getTour() {
+		return path.getTour();
 	}
 	
 	public List<Edge> getEdges() {
-		return new ArrayList<>(edges);
+		return path.getEdges();
 	}
 	
 	public Set<Node> getUnvisited() {
@@ -137,57 +104,11 @@ public class RichBranch extends SparseBranch {
 	}
 	
 	public Node getStart() {
-		return start;
+		return path.getStart();
 	}
 
 	public Node getEnd() {
-		return end;
-	}
-	
-	private static List<Node> nodePath(byte[] path, Graph graph) {
-		List<Node> nodes = new ArrayList<Node>();
-		
-		for (byte id : path) {
-			nodes.add(graph.getNode(id));
-		}
-		
-		return nodes;
-	}
-
-	private static List<Edge> buildEdges(List<Node> path) {
-		List<Edge> edges = new ArrayList<>();
-		
-		if (path.size() < 2) {
-			return edges;
-		}
-		
-		Node previous = null;
-		for (Node node : path) {
-			if (previous != null) {
-				edges.add(new Edge(previous, node));
-			}
-			
-			previous = node;
-		}
-		
-		return edges;
-	}
-
-	public boolean wouldIntersect(Node node) {
-		if (path.size() < 3) {
-			return false;
-		}
-		
-		Edge newEdge = new Edge(end, node);
-		Edge closeEdge = new Edge(node, start);
-		
-		for (Edge edge : edges) {
-			if (newEdge.intersects(edge) || closeEdge.intersects(edge)) {
-				return true;
-			}
-		}
-		
-		return false;
+		return path.getEnd();
 	}
 	
 }

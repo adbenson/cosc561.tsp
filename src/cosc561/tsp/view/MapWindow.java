@@ -7,7 +7,6 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
-import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -19,6 +18,7 @@ import javax.swing.border.EtchedBorder;
 import cosc561.tsp.TravellingSalesman;
 import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.Node;
+import cosc561.tsp.model.Path;
 import cosc561.tsp.model.branch.RichBranch;
 
 public class MapWindow {
@@ -143,7 +143,7 @@ public class MapWindow {
 	}
 
 	public void render(RichBranch branch) {
-		List<Node> tour = branch.getTour();
+		Path tour = branch.getTour();
 		
 		nodeList.removeAll();
 		for (Node n : tour) {

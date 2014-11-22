@@ -1,12 +1,12 @@
 package cosc561.tsp;
 
 import java.awt.Dimension;
-import java.util.List;
 
 import javax.swing.SwingUtilities;
 
 import cosc561.tsp.model.Node;
 import cosc561.tsp.model.NodeParser;
+import cosc561.tsp.model.Path;
 import cosc561.tsp.strategy.BranchAndBoundClassHeuristic;
 import cosc561.tsp.strategy.BranchAndBoundPermutation;
 import cosc561.tsp.strategy.BreadthFirstClassHeuristic;
