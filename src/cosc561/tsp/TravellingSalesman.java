@@ -10,8 +10,8 @@ import cosc561.tsp.strategy.BranchAndBoundClassHeuristic;
 import cosc561.tsp.strategy.BranchAndBoundPath;
 import cosc561.tsp.strategy.BreadthFirstClassHeuristic;
 import cosc561.tsp.strategy.BreadthFirstSearch;
-import cosc561.tsp.strategy.Greedy;
 import cosc561.tsp.strategy.Strategy;
+import cosc561.tsp.strategy.tour_generation.Greedy;
 import cosc561.tsp.strategy.tour_generation.WorstFirstInsertion;
 import cosc561.tsp.view.MapWindow;
 

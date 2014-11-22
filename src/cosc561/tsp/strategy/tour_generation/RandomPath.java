@@ -7,7 +7,6 @@ import java.util.Random;
 import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.Node;
 import cosc561.tsp.model.branch.RichBranch;
-import cosc561.tsp.strategy.Strategy;
 import cosc561.tsp.view.MapWindow;
 
 public class RandomPath extends TourGenerator {

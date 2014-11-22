@@ -10,7 +10,6 @@ import cosc561.tsp.model.Node;
 import cosc561.tsp.model.branch.RichBranch;
 import cosc561.tsp.model.branch.SparseBranch;
 import cosc561.tsp.util.PartitionedQueue;
-import cosc561.tsp.util.PriorityQueueSet;
 import cosc561.tsp.view.MapWindow;
 
 public class UniformCost extends Strategy {
