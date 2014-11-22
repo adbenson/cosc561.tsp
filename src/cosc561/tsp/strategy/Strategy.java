@@ -16,15 +16,13 @@ import cosc561.tsp.view.MapWindow;
 public abstract class Strategy {
 	
 	protected Graph graph;
-	protected MapWindow window;
 	public final Stats stats;
 	
-	private volatile long attempts;
+	private volatile long iteration;
 	protected volatile float currentDistance;
 	
 	protected Strategy(Graph graph, MapWindow window) {
 		this.graph = graph;
-		this.window = window;
 				
 		stats = new Stats(window);
 		
@@ -34,7 +32,7 @@ public abstract class Strategy {
 	public RichBranch nextBranch() throws Exception {
 		RichBranch branch = next();
 		
-		attempts++;
+		iteration++;
 		currentDistance = branch.weight;
 		
 		return branch;
@@ -66,12 +64,16 @@ public abstract class Strategy {
 	}
 	
 	public void updateStats() {
-		stats.output("Attempted Paths", attempts);
+		stats.output("Attempted Paths", iteration);
 		stats.output("Current Distance", currentDistance);
 	}
 	
+	public long getIteration() {
+		return iteration;
+	}
+	
 	public void reset() {
-		attempts = 0;
+		iteration = 0;
 		currentDistance = 0;
 		
 		stats.reset();
@@ -93,12 +95,14 @@ public abstract class Strategy {
 			this.window = window;
 		}
 		
+		//Handles all integer types
 		public void output(String label, long value) {
-			outputs.put(label, Long.toString(value));
+			output(label, Long.toString(value));
 		}
 		
+		//Handles all floating-point types
 		public void output(String label, double value) {
-			outputs.put(label, MapWindow.DECIMAL_FORMAT.format(value));
+			output(label, MapWindow.DECIMAL_FORMAT.format(value));
 		}
 
 		public void output(String label, String value) {
@@ -106,15 +110,28 @@ public abstract class Strategy {
 		}
 		
 		public void reset() {
-			window.clearOutput();
-			window.refresh();
+			if (window != null) {
+				window.clearOutput();
+				window.refresh();
+			}
 		}
 		
 		public void show() {
+			updateStats();
+			
+			if (window == null) {
+				consoleOutput();
+			}
+			else {
+				windowOutput();
+			}
+
+		}
+
+		private void windowOutput() {
 			try {
 				SwingUtilities.invokeAndWait(new Runnable() {
 					public void run() {
-						updateStats();
 						window.clearOutput();
 						
 						for (Entry<String, String> entry : outputs.entrySet()) {
@@ -127,7 +144,12 @@ public abstract class Strategy {
 			} catch (InvocationTargetException | InterruptedException e) {
 				System.err.println("SwingUtilities.invokeAndWait interrupted");
 			}
+		}
 
+		private void consoleOutput() {
+			for (Entry<String, String> entry : outputs.entrySet()) {
+				System.out.println(entry.getKey() +": \t\t"+ entry.getValue());
+			}
 		}
 	}
 }
