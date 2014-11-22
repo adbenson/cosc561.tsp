@@ -46,14 +46,19 @@ public abstract class Strategy {
 		
 	public abstract RichBranch getSolution();
 		
-	public static Strategy instantiate(Class<? extends Strategy> strategyClass, Graph graph, MapWindow window) throws StrategyInstantiationException {
+	public static <T extends Strategy> T instantiate(Class<? extends T> strategyClass, Graph graph, MapWindow window) throws StrategyInstantiationException {
 		try {
-			Constructor<? extends Strategy> constructor = strategyClass.getConstructor(Graph.class, MapWindow.class);
+			Constructor<? extends T> constructor = strategyClass.getConstructor(Graph.class, MapWindow.class);
 			return constructor.newInstance(graph, window);
 		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			throw new StrategyInstantiationException("Error instantiating ", e);
 		}
 
+	}
+	
+	public RichBranch generate(Class<? extends TourGenerator> generatorClass) throws Exception {
+		TourGenerator generator = instantiate(generatorClass, graph, null);
+		return generator.generate();
 	}
 	
 	public static class StrategyInstantiationException extends Exception {
