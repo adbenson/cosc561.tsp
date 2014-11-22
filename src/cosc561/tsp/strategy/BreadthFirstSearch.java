@@ -3,8 +3,8 @@ package cosc561.tsp.strategy;
 import cosc561.tsp.Solver;
 import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.Node;
-import cosc561.tsp.model.branch.SparseBranch;
 import cosc561.tsp.model.branch.RichBranch;
+import cosc561.tsp.model.branch.SparseBranch;
 import cosc561.tsp.util.PartitionedQueue;
 import cosc561.tsp.view.MapWindow;
 

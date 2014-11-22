@@ -1,18 +1,18 @@
 package cosc561.tsp;
 
 import java.awt.Dimension;
-import java.util.List;
 
 import javax.swing.SwingUtilities;
 
-import cosc561.tsp.model.Node;
 import cosc561.tsp.model.NodeParser;
+import cosc561.tsp.model.Path;
 import cosc561.tsp.strategy.BranchAndBoundClassHeuristic;
-import cosc561.tsp.strategy.BranchAndBoundPermutation;
+import cosc561.tsp.strategy.BranchAndBoundPath;
 import cosc561.tsp.strategy.BreadthFirstClassHeuristic;
 import cosc561.tsp.strategy.BreadthFirstSearch;
 import cosc561.tsp.strategy.Greedy;
 import cosc561.tsp.strategy.Strategy;
+import cosc561.tsp.strategy.tour_generation.WorstFirstInsertion;
 import cosc561.tsp.view.MapWindow;
 
 public class TravellingSalesman {
@@ -36,8 +36,9 @@ public class TravellingSalesman {
 		Greedy.class, 
 		BreadthFirstSearch.class, 
 		BreadthFirstClassHeuristic.class,
-		BranchAndBoundPermutation.class,
-		BranchAndBoundClassHeuristic.class
+		BranchAndBoundPath.class,
+		BranchAndBoundClassHeuristic.class,
+		WorstFirstInsertion.class
 	};
 	
 	public static void main(String[] args) throws Exception {	
@@ -46,7 +47,7 @@ public class TravellingSalesman {
 		
 	public TravellingSalesman() throws Exception {
 		
-		List<Node> nodes = NodeParser.parse("TSPDataComma.txt");
+		Path nodes = NodeParser.parse("TSPDataComma.txt");
 		
 		SwingUtilities.invokeAndWait(new Runnable() {
 			public void run() {

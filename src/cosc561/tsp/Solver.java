@@ -1,10 +1,7 @@
 package cosc561.tsp;
 
-import java.util.Date;
-import java.util.List;
-
 import cosc561.tsp.model.Graph;
-import cosc561.tsp.model.Node;
+import cosc561.tsp.model.Path;
 import cosc561.tsp.model.branch.RichBranch;
 import cosc561.tsp.strategy.Strategy;
 import cosc561.tsp.strategy.Strategy.StrategyInstantiationException;
@@ -19,14 +16,14 @@ public class Solver extends Controls {
 	
 	private Strategy strategy;
 	
-	private List<Node> allNodes;
+	private Path allNodes;
 	private int nodeCap = TravellingSalesman.DEFAULT_NODES;
 	
 	private volatile RichBranch currentBranch;
 	
 	private volatile boolean render;
 	
-	public Solver(List<Node> nodes, MapWindow window) {
+	public Solver(Path nodes, MapWindow window) {
 		this.allNodes = nodes;
 		this.window = window;
 		
@@ -84,7 +81,7 @@ public class Solver extends Controls {
 		} catch (Exception e) {
 			throw new RuntimeException("Exception encountered getting next branch", e);
 		}
-		
+		currentBranch = strategy.getSolution();
 		if (manual) {
 			render();
 			updateStats();
@@ -144,6 +141,7 @@ public class Solver extends Controls {
 		strategy.init();
 		
 		window.reset();
+		window.render(strategy.getSolution());
 	}
 
 	@Override

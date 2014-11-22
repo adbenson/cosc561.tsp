@@ -1,28 +1,26 @@
 package cosc561.tsp.model;
 
 import java.awt.Dimension;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class Graph {
 	
 	private Map<Integer, Node> nodesById;
-	private List<Node> nodes;
+	private Path nodes;
 	
 	private int maxX = 0;
 	private int maxY = 0;
 	
-	public Graph(List<Node> nodes) {
+	public Graph(Path nodes) {
 		this(nodes, nodes.size());
 	}
 		
-	public Graph(List<Node> nodes, int nodeCap) {
+	public Graph(Path nodes, int nodeCap) {
 		this.nodesById = new HashMap<>();
-		this.nodes = new ArrayList<>();
+		this.nodes = new Path();
 		addNodes(nodes, nodeCap);
 	}
 	
@@ -33,7 +31,7 @@ public class Graph {
 		this.maxX = Math.max(this.maxX, node.x);
 	}
 	
-	private void addNodes(List<Node> nodes, int cap) {
+	private void addNodes(Path nodes, int cap) {
 		for(int i = 0; i < cap && i < nodes.size(); i++) {
 			addNode(nodes.get(i));
 		}
@@ -47,8 +45,8 @@ public class Graph {
 		return new HashSet<>(nodes);
 	}
 	
-	public List<Node> getNodeList() {
-		return new ArrayList<Node>(nodes);
+	public Path getNodeList() {
+		return new Path(nodes);
 	}
 	
 	public Dimension getBounds() {
@@ -60,7 +58,7 @@ public class Graph {
 		return nodes.get(0);
 	}
 
-	public Set<Node> getNodesNotIn(List<Node> path) {
+	public Set<Node> getNodesNotIn(Path path) {
 		Set<Node> others = new HashSet<>(nodes);
 		others.removeAll(path);
 		return others;

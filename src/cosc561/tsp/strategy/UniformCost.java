@@ -7,8 +7,8 @@ import java.util.Set;
 import cosc561.tsp.Solver;
 import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.Node;
-import cosc561.tsp.model.branch.Branch;
-import cosc561.tsp.model.branch.PathBranch;
+import cosc561.tsp.model.branch.RichBranch;
+import cosc561.tsp.model.branch.SparseBranch;
 import cosc561.tsp.util.PartitionedQueue;
 import cosc561.tsp.util.PriorityQueueSet;
 import cosc561.tsp.view.MapWindow;
@@ -35,8 +35,8 @@ public class UniformCost extends Strategy {
 		super(graph, window);
 	}
 
-	PartitionedQueue<Branch> branches;
-	PathBranch current;
+	PartitionedQueue<SparseBranch> branches;
+	RichBranch current;
 	
 	Solver solver;
 	
@@ -52,7 +52,7 @@ public class UniformCost extends Strategy {
 		
 		root = graph.getRoot();
 		
-		current = new PathBranch(root, graph.getNodes());
+		current = new RichBranch(root, graph);
 		
 		frontier = new PriorityQueueSet(graph.getNodes().size());
 		frontier.add(current);
@@ -80,13 +80,13 @@ public class UniformCost extends Strategy {
 	 */
 
 	@Override
-	protected PathBranch next() {
+	protected RichBranch next() {
 		if (frontier.isEmpty()) {
 			System.err.println("No solution found using UniformCost search");
 			return null;
 		}
 		
-		current = frontier.poll();
+		current = new RichBranch(frontier.poll());
 		
 		if (frontier.isEmpty()){
 			System.out.println("dont' care");
@@ -100,13 +100,13 @@ public class UniformCost extends Strategy {
 			}
 			
 			if (!explored.contains(n)) {
-				PathBranch next = new PathBranch(current, n);
+				RichBranch next = new RichBranch(current, n);
 				
 				if (!frontier.containsEndNode(n)) {
 					frontier.add(next);
 				}
-				else if (frontier.get(n).getWeight() > next.getWeight()) {
-					frontier.add(next);
+				else if (frontier.get(n).weight > next.weight) {
+					frontier.add(new SparseBranch(next));
 				}
 			}
 		}
@@ -117,5 +117,10 @@ public class UniformCost extends Strategy {
 	@Override
 	public boolean isComplete() {
 		return current.isComplete();
+	}
+
+	@Override
+	public RichBranch getSolution() {
+		return current;
 	}
 }

@@ -9,8 +9,8 @@ import java.util.List;
 
 public class NodeParser {
 		
-	public static List<Node> parse(String filename) throws NodeParseException {
-		ArrayList<Node> nodes = new ArrayList<>();
+	public static Path parse(String filename) throws NodeParseException {
+		List<Node> nodes = new ArrayList<Node>();
 		BufferedReader br = openReader(filename);
 	    
 	    try {
@@ -24,7 +24,7 @@ public class NodeParser {
 			closeReader(br);
 	    }
 	    
-	    return nodes;
+	    return new Path(nodes);
 	}
 	
 	private static String readLine(BufferedReader br) throws NodeParseException {

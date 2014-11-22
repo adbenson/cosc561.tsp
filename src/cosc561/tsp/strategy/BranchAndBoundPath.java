@@ -11,11 +11,12 @@ import cosc561.tsp.view.MapWindow;
 
 public class BranchAndBoundPath extends Strategy {
 	
-	private static final int QUEUE_SIZE = 1000;
+	private static final int QUEUE_SIZE = 1000000;
 
 	private long rejected;
 
 	private Queue<SparseBranch> pathsInProgress;
+	private long peakQueueSize;
 	
 	private RichBranch bestTour;
 	
@@ -27,7 +28,7 @@ public class BranchAndBoundPath extends Strategy {
 	
 	public void init() {
 		
-		pathsInProgress = new PriorityQueue<>(QUEUE_SIZE);
+		pathsInProgress = new PriorityQueue<>(QUEUE_SIZE, new SparseBranch.ReverseComparator());
 		
 		//Naieve first candidate, just grab all nodes.
 		//This can be improved by heuristic
@@ -36,6 +37,7 @@ public class BranchAndBoundPath extends Strategy {
 		pathsInProgress.add(new RichBranch(graph.getRoot(), graph));
 		
 		rejected = 0;
+		peakQueueSize = -1;
 	}
 
 	@Override
@@ -76,7 +78,12 @@ public class BranchAndBoundPath extends Strategy {
 		super.updateStats();
 		stats.output("Rejected Paths", rejected);
 		stats.output("Current Best Distance", bestTour.weight);
-		stats.output("Queue Capacity", pathsInProgress.size());
+		
+		if (pathsInProgress.size() > peakQueueSize) {
+			peakQueueSize = pathsInProgress.size();
+		}
+		stats.output("Current Queue Capacity", pathsInProgress.size());
+		stats.output("Peak Queue Capacity", peakQueueSize);
 	}
 
 	@Override
