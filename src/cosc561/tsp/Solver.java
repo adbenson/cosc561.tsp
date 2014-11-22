@@ -103,7 +103,8 @@ public class Solver extends Controls {
 	
 	protected void updateStats() {
 		if (strategy != null) {
-			strategy.stats.output("Running Time", scheduler.getContinuousRunTime());
+			String runTime = MapWindow.formatTimeInterval(scheduler.getContinuousRunTime());
+			strategy.stats.output("Running Time", runTime);
 			strategy.stats.show();
 		}
 	}

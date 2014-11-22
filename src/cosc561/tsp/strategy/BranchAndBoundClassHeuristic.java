@@ -29,7 +29,7 @@ public class BranchAndBoundClassHeuristic extends Strategy {
 	
 	public void init() {
 		
-		pathsInProgress = new PriorityQueue<>(QUEUE_SIZE);
+		pathsInProgress = new PriorityQueue<>(QUEUE_SIZE, new SparseBranch.ReverseComparator());
 		
 		//Naieve first candidate, just grab all nodes.
 		//This can be improved by heuristic

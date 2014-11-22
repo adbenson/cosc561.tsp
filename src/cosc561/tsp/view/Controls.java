@@ -98,11 +98,13 @@ public abstract class Controls {
 		private ActionListener strategiesComboBox() {
 			return new ActionListener() {
 				@SuppressWarnings("unchecked")
-				public void actionPerformed(ActionEvent e) {
-					JComboBox<? extends Strategy> strategies = (JComboBox<? extends Strategy>) e
-							.getSource();
-					changeStrategy((Class<? extends Strategy>) strategies
-							.getSelectedItem());
+				public void actionPerformed(final ActionEvent e) {
+					new Thread(new Runnable() {
+						public void run() {
+							JComboBox<? extends Strategy> strategies = (JComboBox<? extends Strategy>) e.getSource();
+							changeStrategy((Class<? extends Strategy>) strategies.getSelectedItem());
+						}
+					});
 				}
 			};
 		}
