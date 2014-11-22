@@ -51,7 +51,7 @@ public class Path implements List<Node> {
 			edges = buildEdges(path);
 			edgesCurrent = true;
 		}
-		return edges;
+		return new ArrayList<Edge>(edges);
 	}
 
 	public Path getTour() {
