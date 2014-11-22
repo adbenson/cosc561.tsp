@@ -22,12 +22,14 @@ public class Solver extends Controls {
 	private volatile RichBranch currentBranch;
 	
 	private volatile boolean render;
+	private volatile boolean showBest;
 	
 	public Solver(Path nodes, MapWindow window) {
 		this.allNodes = nodes;
 		this.window = window;
 		
-		render = true;		
+		render = true;	
+		showBest = false;
 		
 		int intervalMs = EventScheduler.cyclesPerSecond(TravellingSalesman.FPS);
 		scheduler = new EventScheduler(intervalMs, TravellingSalesman.TOLERANCE);
@@ -76,12 +78,22 @@ public class Solver extends Controls {
 			return;
 		}
 		
+		RichBranch next;
+		
 		try {
-			currentBranch = strategy.nextBranch();
+			next = strategy.nextBranch();
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new RuntimeException("Exception encountered getting next branch", e);
 		}
-		currentBranch = strategy.getSolution();
+		
+		if (showBest) {
+			currentBranch = strategy.getSolution();
+		}
+		else {
+			currentBranch = next;
+		}
+		
 		if (manual) {
 			render();
 			updateStats();
@@ -128,7 +140,7 @@ public class Solver extends Controls {
 	}
 	
 	@Override
-	public void reset(Class selectedStrategy, int nodes) {
+	public void reset(Class<? extends Strategy> selectedStrategy, int nodes) {
 		if (scheduler.isRunning()) {
 			scheduler.end();
 		}
@@ -138,7 +150,12 @@ public class Solver extends Controls {
 		changeStrategy(selectedStrategy);
 		
 		strategy.reset();
-		strategy.init();
+		try {
+			strategy.init();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("Exeception initializing strategy", e);
+		}
 		
 		window.reset();
 		window.render(strategy.getSolution());
@@ -156,6 +173,10 @@ public class Solver extends Controls {
 	public void setRender(boolean render) {
 		this.render = render;
 	}
-	
+
+	@Override
+	public void setShowBest(boolean best) {
+		this.showBest = best;
+	}
 
 }

@@ -26,11 +26,13 @@ public abstract class Controls {
 
 	public abstract void next(boolean manual);
 
-	public abstract void reset(Class strategy, int nodes);
+	public abstract void reset(Class<? extends Strategy> strategy, int nodes);
 
 	public abstract void setPaused(boolean paused);
 
 	public abstract void setRender(boolean render);
+	
+	public abstract void setShowBest(boolean best);
 
 	public abstract void changeStrategy(Class<? extends Strategy> strategy);
 
@@ -38,7 +40,7 @@ public abstract class Controls {
 
 	private volatile JToggleButton pause;
 	
-	private volatile JComboBox<Class<?>> strategies;
+	private volatile JComboBox<Class<? extends Strategy>> strategies;
 	
 	private volatile SpinnerNumberModel model;
 
@@ -61,10 +63,16 @@ public abstract class Controls {
 	private class ControlPanel extends JPanel {
 		private static final long serialVersionUID = 1L;
 
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		public ControlPanel() {
 			super();
 
 			setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+			
+			JCheckBox best = new JCheckBox("Show Best");
+			add(best);
+			best.setSelected(false);
+			best.addItemListener(bestToggle());
 
 			JCheckBox render = new JCheckBox("Render");
 			add(render);
@@ -84,7 +92,7 @@ public abstract class Controls {
 			add(reset);
 			reset.setAction(resetButton());
 
-			strategies = new JComboBox<>(TravellingSalesman.strategies);
+			strategies = (JComboBox<Class<? extends Strategy>>) new JComboBox(TravellingSalesman.strategies);
 			strategies.setSelectedItem(TravellingSalesman.DEFAULT_STRATEGY);
 			add(strategies);
 			strategies.addActionListener(strategiesComboBox());
@@ -93,6 +101,18 @@ public abstract class Controls {
 			model = new SpinnerNumberModel(TravellingSalesman.DEFAULT_NODES, 0, TravellingSalesman.MAX_NODES, 1);
 			JSpinner nodeCount = new JSpinner(model);
 			add(nodeCount);
+		}
+
+		private ItemListener bestToggle() {
+			return new ItemListener() {
+				public void itemStateChanged(final ItemEvent event) {
+					new Thread(new Runnable() {
+						public void run() {
+							setShowBest(event.getStateChange() == ItemEvent.SELECTED);
+						}
+					}).start();
+				}
+			};
 		}
 
 		private ActionListener strategiesComboBox() {
@@ -109,6 +129,7 @@ public abstract class Controls {
 			};
 		}
 
+		@SuppressWarnings("serial")
 		public final Action nextButton() {
 			return new AbstractAction("Next") {
 				public void actionPerformed(ActionEvent event) {
@@ -121,12 +142,14 @@ public abstract class Controls {
 			};
 		};
 
+		@SuppressWarnings("serial")
 		public final Action resetButton() {
 			return new AbstractAction("Reset") {
 				public void actionPerformed(ActionEvent event) {
 					new Thread(new Runnable() {
+						@SuppressWarnings("unchecked")
 						public void run() {
-							reset((Class)strategies.getSelectedItem(), (int)model.getValue());
+							reset((Class<? extends Strategy>)strategies.getSelectedItem(), (int)model.getValue());
 						}
 					}).start();
 				}
