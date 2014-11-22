@@ -26,7 +26,7 @@ public class MapWindow {
 	public static final Color BACKGROUND = Color.WHITE;
 	
 	public static final int OUTPUT_WIDTH = 300;
-	public static final int NODE_LIST_WIDTH = 50;
+	public static final int NODE_LIST_WIDTH = 70;
 	
 	private static final String FORMAT_PATTERN = "###,###,###,###.###";
 	private static final DecimalFormat format = new DecimalFormat(FORMAT_PATTERN);
