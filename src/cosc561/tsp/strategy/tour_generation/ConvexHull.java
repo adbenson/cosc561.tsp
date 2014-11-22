@@ -1,4 +1,4 @@
-package cosc561.tsp.strategy.path_generation;
+package cosc561.tsp.strategy.tour_generation;
 
 import java.awt.Polygon;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import cosc561.tsp.model.branch.RichBranch;
 import cosc561.tsp.strategy.Strategy;
 import cosc561.tsp.view.MapWindow;
 
-public class ConvexHull extends Strategy {
+public class ConvexHull extends TourGenerator {
 
 	protected ConvexHull(Graph graph, MapWindow window) {
 		super(graph, window);
@@ -30,9 +30,9 @@ public class ConvexHull extends Strategy {
 	public void init() {
 		Polygon hull = new Polygon();
 		
-		List<Node> span = initialSpan(graph.getnodes());
+		List<Node> span = initialSpan(graph.getNodes());
 		
-		external = new HashSet<Node>(graph.getnodes());
+		external = new HashSet<Node>(graph.getNodes());
 		external.removeAll(span);
 		
 		branch = new RichBranch(span, graph);

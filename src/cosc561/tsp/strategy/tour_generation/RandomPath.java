@@ -1,4 +1,4 @@
-package cosc561.tsp.strategy.path_generation;
+package cosc561.tsp.strategy.tour_generation;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -10,7 +10,7 @@ import cosc561.tsp.model.branch.RichBranch;
 import cosc561.tsp.strategy.Strategy;
 import cosc561.tsp.view.MapWindow;
 
-public class RandomPath extends Strategy {
+public class RandomPath extends TourGenerator {
 	
 	private RichBranch path;
 	

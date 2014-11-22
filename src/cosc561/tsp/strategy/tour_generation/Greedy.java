@@ -1,4 +1,4 @@
-package cosc561.tsp.strategy.path_generation;
+package cosc561.tsp.strategy.tour_generation;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -9,7 +9,7 @@ import cosc561.tsp.model.branch.RichBranch;
 import cosc561.tsp.strategy.Strategy;
 import cosc561.tsp.view.MapWindow;
 
-public class Greedy extends Strategy {
+public class Greedy extends TourGenerator {
 	
 	public Greedy(Graph graph, MapWindow window) {
 		super(graph, window);
