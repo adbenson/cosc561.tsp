@@ -9,8 +9,11 @@ import java.util.ListIterator;
 public class Path implements List<Node> {
 
 	private final List<Node> path;
-	private List<Edge> edges = null;
 	
+	//Edges will be evaluated lazily, as we don't need them in most cases,
+	//but when we do, we need them repeatedly. 
+	//So we'll keep track of whether they are up-to-date or not.
+	private List<Edge> edges = null;
 	private boolean edgesCurrent = false;
 
 	public Path() {
