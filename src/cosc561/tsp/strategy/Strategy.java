@@ -112,12 +112,7 @@ public abstract class Strategy {
 			this.window = window;
 		}
 		
-		//Handles all integer types
-		public void output(String label, long value) {
-			output(label, Long.toString(value));
-		}
-		
-		//Handles all floating-point types
+		//Handles all numeric types
 		public void output(String label, double value) {
 			output(label, MapWindow.DECIMAL_FORMAT.format(value));
 		}
