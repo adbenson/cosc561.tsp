@@ -20,13 +20,13 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EtchedBorder;
 
 import cosc561.tsp.TravellingSalesman;
-import cosc561.tsp.strategy.Strategy;
+import cosc561.tsp.strategy.classes.Strategies;
 
 public abstract class Controls {
 
 	public abstract void next(boolean manual);
 
-	public abstract void reset(Class<? extends Strategy> strategy, int nodes);
+	public abstract void reset(Strategies strategy, int nodes);
 
 	public abstract void setPaused(boolean paused);
 
@@ -34,13 +34,13 @@ public abstract class Controls {
 	
 	public abstract void setShowBest(boolean best);
 
-	public abstract void changeStrategy(Class<? extends Strategy> strategy);
+	public abstract void changeStrategy(Strategies strategy);
 
 	private ControlPanel panel;
 
 	private volatile JToggleButton pause;
 	
-	private volatile JComboBox<Class<? extends Strategy>> strategies;
+	private volatile JComboBox<Strategies> strategies;
 	
 	private volatile SpinnerNumberModel model;
 
@@ -63,7 +63,6 @@ public abstract class Controls {
 	private class ControlPanel extends JPanel {
 		private static final long serialVersionUID = 1L;
 
-		@SuppressWarnings({ "unchecked", "rawtypes" })
 		public ControlPanel() {
 			super();
 
@@ -92,8 +91,8 @@ public abstract class Controls {
 			add(reset);
 			reset.setAction(resetButton());
 
-			strategies = (JComboBox<Class<? extends Strategy>>) new JComboBox(TravellingSalesman.strategies);
-			strategies.setSelectedItem(TravellingSalesman.DEFAULT_STRATEGY);
+			strategies = new JComboBox<Strategies>(Strategies.ALL);
+			strategies.setSelectedItem(Strategies.DEFAULT);
 			add(strategies);
 			strategies.addActionListener(strategiesComboBox());
 			
@@ -121,8 +120,8 @@ public abstract class Controls {
 				public void actionPerformed(final ActionEvent e) {
 					new Thread(new Runnable() {
 						public void run() {
-							JComboBox<? extends Strategy> strategies = (JComboBox<? extends Strategy>) e.getSource();
-							changeStrategy((Class<? extends Strategy>) strategies.getSelectedItem());
+							JComboBox<Strategies> strategies = (JComboBox<Strategies>) e.getSource();
+							changeStrategy((Strategies) strategies.getSelectedItem());
 						}
 					});
 				}
@@ -147,9 +146,8 @@ public abstract class Controls {
 			return new AbstractAction("Reset") {
 				public void actionPerformed(ActionEvent event) {
 					new Thread(new Runnable() {
-						@SuppressWarnings("unchecked")
 						public void run() {
-							reset((Class<? extends Strategy>)strategies.getSelectedItem(), (int)model.getValue());
+							reset((Strategies)strategies.getSelectedItem(), (int)model.getValue());
 						}
 					}).start();
 				}

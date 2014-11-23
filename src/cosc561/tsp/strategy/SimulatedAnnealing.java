@@ -6,6 +6,7 @@ import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.Node;
 import cosc561.tsp.model.Path;
 import cosc561.tsp.model.branch.RichBranch;
+import cosc561.tsp.strategy.classes.TourGenerationStrategies;
 import cosc561.tsp.strategy.tour_generation.RandomPath;
 import cosc561.tsp.strategy.tour_generation.TourGenerator;
 import cosc561.tsp.view.MapWindow;
@@ -33,7 +34,7 @@ public class SimulatedAnnealing extends Strategy {
 
 	@Override
 	public void init() throws Exception {
-		best = generate(RandomPath.class);
+		best = generate(TourGenerationStrategies.RANDOM);
 		temperature = 1.0;
 		
 		improvements = 0;

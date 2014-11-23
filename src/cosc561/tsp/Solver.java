@@ -5,6 +5,7 @@ import cosc561.tsp.model.Path;
 import cosc561.tsp.model.branch.RichBranch;
 import cosc561.tsp.strategy.Strategy;
 import cosc561.tsp.strategy.Strategy.StrategyInstantiationException;
+import cosc561.tsp.strategy.classes.Strategies;
 import cosc561.tsp.util.EventScheduler;
 import cosc561.tsp.view.Controls;
 import cosc561.tsp.view.MapWindow;
@@ -54,7 +55,7 @@ public class Solver extends Controls {
 		
 		window.setControls(this);
 		
-		reset(TravellingSalesman.DEFAULT_STRATEGY, TravellingSalesman.DEFAULT_NODES);
+		reset(Strategies.DEFAULT, TravellingSalesman.DEFAULT_NODES);
 	}
 
 	public void start() {
@@ -121,7 +122,7 @@ public class Solver extends Controls {
 		}
 	}
 	
-	public void changeStrategy(Class<? extends Strategy> strategyClass) {
+	public void changeStrategy(Strategies strategyClass) {
 		Graph graph = new Graph(allNodes, nodeCap);
 		
 		try {
@@ -140,14 +141,14 @@ public class Solver extends Controls {
 	}
 	
 	@Override
-	public void reset(Class<? extends Strategy> selectedStrategy, int nodes) {
+	public void reset(Strategies strategyClass, int nodes) {
 		if (scheduler.isRunning()) {
 			scheduler.end();
 		}
 		setPauseButton(true);
 		
 		nodeCap = nodes;
-		changeStrategy(selectedStrategy);
+		changeStrategy(strategyClass);
 		
 		strategy.reset();
 		try {
