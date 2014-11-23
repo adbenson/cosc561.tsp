@@ -100,6 +100,37 @@ public class Path implements List<Node> {
 		
 		return edges;
 	}
+	
+	public void swapNodes(int i, int j) {
+		edgesCurrent = false;
+		
+		Node temp = path.get(i);
+		path.set(i, path.get(j));
+		path.set(j, temp);
+	}
+	
+
+	public void swapPath(Node n1, Node n2) {
+		int a = path.indexOf(n1);
+		int b = path.indexOf(n2);
+		
+		swapPath(a, b);
+	}
+	
+	public void swapPath(int a, int b) {
+		assert(a > 0 && a < size());
+		assert(b > 0 && b < size());
+		assert(a != b);
+		
+		int first = Math.min(a, b);
+		int last = Math.max(a, b);
+		
+		while (first < last) {
+			swapNodes(first, last);
+			first++;
+			last--;
+		}
+	}
 
 	@Override
 	public int size() {
@@ -316,4 +347,5 @@ public class Path implements List<Node> {
 	public List<Node> subList(int fromIndex, int toIndex) {
 		return new Path(path.subList(fromIndex, toIndex));
 	}
+
 }
