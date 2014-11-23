@@ -13,6 +13,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EtchedBorder;
 
@@ -27,7 +29,7 @@ public class MapWindow {
 	public static final Color BACKGROUND = Color.WHITE;
 	
 	public static final int OUTPUT_WIDTH = 300;
-	public static final int NODE_LIST_WIDTH = 70;
+	public static final int NODE_LIST_HEIGHT = 40;
 	
 	private static final String FORMAT_PATTERN = "###,###,###,###.###";
 	public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat(FORMAT_PATTERN);
@@ -39,7 +41,7 @@ public class MapWindow {
 	
 	private JPanel outputPanel;
 	private JPanel controlPanel;
-	private JPanel nodeList;
+	private JTextArea nodeList;
 	private Container content;
 	
 	public MapWindow(Dimension dimensions) {
@@ -56,11 +58,13 @@ public class MapWindow {
 		graphPanel.setPreferredSize(dimensions);
 		graphContainer.add(graphPanel, BorderLayout.CENTER);
 		
-		nodeList = new JPanel();
-		nodeList.setPreferredSize(new Dimension(NODE_LIST_WIDTH, 0));
-		nodeList.setLayout(new GridLayout(0, 1));
-		nodeList.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-		graphContainer.add(nodeList, BorderLayout.EAST);
+		nodeList = new JTextArea();
+		nodeList.setEditable(false);
+		
+		JScrollPane scrollPane = new JScrollPane(nodeList);
+		scrollPane.setPreferredSize(new Dimension(dimensions.width, NODE_LIST_HEIGHT));
+		scrollPane.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+		graphContainer.add(scrollPane, BorderLayout.SOUTH);
 		
 		content.add(graphContainer, BorderLayout.CENTER);
 		
@@ -143,11 +147,8 @@ public class MapWindow {
 
 	public void render(RichBranch branch) {
 		Path tour = branch.getTour();
-		
-		nodeList.removeAll();
-		for (Node n : tour) {
-			nodeList.add(new JLabel(n.toString()));
-		}
+
+		nodeList.setText(tour.toString());
 		
 		graphics.initDraw();
 		

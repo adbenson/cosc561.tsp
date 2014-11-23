@@ -158,11 +158,6 @@ public class Path implements List<Node> {
 	}
 
 	@Override
-	public String toString() {
-		return path.toString();
-	}
-
-	@Override
 	public Iterator<Node> iterator() {
 		return new Iterator<Node>() {
 			private final Iterator<? extends Node> i = path.iterator();
@@ -344,8 +339,18 @@ public class Path implements List<Node> {
 		};
 	}
 
+	@Override
 	public List<Node> subList(int fromIndex, int toIndex) {
 		return new Path(path.subList(fromIndex, toIndex));
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for (Node n : this) {
+			sb.append(n.id + ", ");
+		}
+		
+		return sb.toString();
+	}
 }
