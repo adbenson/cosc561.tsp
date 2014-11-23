@@ -1,4 +1,4 @@
-package cosc561.tsp.strategy.tour_generation;
+package cosc561.tsp.strategy.p_approx;
 
 import java.util.Collections;
 import java.util.LinkedList;
