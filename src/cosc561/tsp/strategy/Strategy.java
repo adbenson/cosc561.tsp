@@ -62,6 +62,16 @@ public abstract class Strategy {
 		return generator.generate();
 	}
 	
+	public RichBranch generate() throws Exception {
+		init();
+		
+		while(!isComplete()) {
+			next();
+		}
+		
+		return getSolution();
+	}
+	
 	public static class StrategyInstantiationException extends Exception {
 		private static final long serialVersionUID = 1L;
 		public StrategyInstantiationException(String message, Throwable cause) {

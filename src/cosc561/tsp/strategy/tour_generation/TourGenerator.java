@@ -7,18 +7,8 @@ import cosc561.tsp.view.MapWindow;
 
 public abstract class TourGenerator extends Strategy {
 
-	protected TourGenerator(Graph graph, MapWindow window) {
+	public TourGenerator(Graph graph, MapWindow window) {
 		super(graph, window);
-	}
-
-	public RichBranch generate() throws Exception {
-		init();
-		
-		while(!isComplete()) {
-			next();
-		}
-		
-		return getSolution();
 	}
 
 }
