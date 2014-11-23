@@ -14,14 +14,16 @@ import cosc561.tsp.view.MapWindow;
 public class SimulatedAnnealing extends Strategy {
 	
 	private static final long MAX_ITERATIONS = 1000000000;
+	private static final double MIN_TEMP = 0.001;
 
 	private Random rand;
 	
-	private double coolingRate = 0.99;
-	private int coolingSchedule = 1000000; 
+	private double coolingRate = 0.995;
+	private int coolingSchedule = 2000000; 
 	
 	private double temperature;
 		
+	private RichBranch current;
 	private RichBranch best;
 	
 	private long improvements;
@@ -45,17 +47,20 @@ public class SimulatedAnnealing extends Strategy {
 	protected RichBranch next() throws Exception {
 		cool();
 		
-		RichBranch current = new RichBranch(perturb(best.getPath()), graph);
+		RichBranch next = new RichBranch(perturb(current.getPath()), graph);
 		
-		if (current.weight < best.weight) {
-			best = current;
+		if (next.weight < current.weight) {
+			current = next;
 			improvements++;
 		}
-		else if (merit(current.weight, best.weight, temperature) >= rand.nextDouble()) {
-			best = current; 
+		else if (merit(next.weight, current.weight, temperature) >= rand.nextDouble()) {
+			current = next; 
 			acceptedRegressions++;
 		}
 
+		if (current.weight < best.weight) {
+			best = current;
+		}
 
 		return current;
 	}
@@ -97,6 +102,7 @@ public class SimulatedAnnealing extends Strategy {
 	@Override
 	public void updateStats() {
 		super.updateStats();
+		stats.output("Best Distance", best.weight);
 		stats.output("Temperature", temperature);
 		stats.output("Improvments", improvements);
 		stats.output("Accepted Regressions", acceptedRegressions);
@@ -104,7 +110,7 @@ public class SimulatedAnnealing extends Strategy {
 
 	@Override
 	public boolean isComplete() {
-		return getIteration() >= MAX_ITERATIONS;
+		return temperature < MIN_TEMP;
 	}
 
 	@Override
