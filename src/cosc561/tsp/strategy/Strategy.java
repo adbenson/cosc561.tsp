@@ -11,6 +11,7 @@ import javax.swing.SwingUtilities;
 import cosc561.tsp.TravellingSalesman;
 import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.branch.RichBranch;
+import cosc561.tsp.strategy.tour_generation.TourGenerator;
 import cosc561.tsp.view.MapWindow;
 
 public abstract class Strategy {
@@ -29,7 +30,7 @@ public abstract class Strategy {
 		reset();
 	}
 	
-	public RichBranch nextBranch() throws Exception {
+	public final RichBranch nextBranch() throws Exception {
 		RichBranch branch = next();
 		
 		iteration++;
@@ -37,10 +38,10 @@ public abstract class Strategy {
 		
 		return branch;
 	};
+
+	public abstract void init() throws Exception;
 	
 	protected abstract RichBranch next() throws Exception;
-
-	public abstract void init();
 
 	public abstract boolean isComplete();
 		
