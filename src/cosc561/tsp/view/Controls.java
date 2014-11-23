@@ -20,13 +20,13 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EtchedBorder;
 
 import cosc561.tsp.TravellingSalesman;
-import cosc561.tsp.strategy.classes.Strategies;
+import cosc561.tsp.strategy.classes.StrategyClass;
 
 public abstract class Controls {
 
 	public abstract void next(boolean manual);
 
-	public abstract void reset(Strategies strategy, int nodes);
+	public abstract void reset(StrategyClass strategy, int nodes);
 
 	public abstract void setPaused(boolean paused);
 
@@ -34,13 +34,13 @@ public abstract class Controls {
 	
 	public abstract void setShowBest(boolean best);
 
-	public abstract void changeStrategy(Strategies strategy);
+	public abstract void changeStrategy(StrategyClass strategy);
 
 	private ControlPanel panel;
 
 	private volatile JToggleButton pause;
 	
-	private volatile JComboBox<Strategies> strategies;
+	private volatile JComboBox<StrategyClass> strategies;
 	
 	private volatile SpinnerNumberModel model;
 
@@ -91,8 +91,8 @@ public abstract class Controls {
 			add(reset);
 			reset.setAction(resetButton());
 
-			strategies = new JComboBox<Strategies>(Strategies.ALL);
-			strategies.setSelectedItem(Strategies.DEFAULT);
+			strategies = new JComboBox<StrategyClass>(StrategyClass.ALL);
+			strategies.setSelectedItem(StrategyClass.DEFAULT);
 			add(strategies);
 			strategies.addActionListener(strategiesComboBox());
 			
@@ -120,8 +120,8 @@ public abstract class Controls {
 				public void actionPerformed(final ActionEvent e) {
 					new Thread(new Runnable() {
 						public void run() {
-							JComboBox<Strategies> strategies = (JComboBox<Strategies>) e.getSource();
-							changeStrategy((Strategies) strategies.getSelectedItem());
+							JComboBox<StrategyClass> strategies = (JComboBox<StrategyClass>) e.getSource();
+							changeStrategy((StrategyClass) strategies.getSelectedItem());
 						}
 					});
 				}
@@ -147,7 +147,7 @@ public abstract class Controls {
 				public void actionPerformed(ActionEvent event) {
 					new Thread(new Runnable() {
 						public void run() {
-							reset((Strategies)strategies.getSelectedItem(), (int)model.getValue());
+							reset((StrategyClass)strategies.getSelectedItem(), (int)model.getValue());
 						}
 					}).start();
 				}

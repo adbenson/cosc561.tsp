@@ -2,8 +2,8 @@ package cosc561.tsp.strategy.classes;
 
 import cosc561.tsp.strategy.Strategy;
 
-public interface Strategies {
-	public static final Strategies[] ALL = new Strategies[] {
+public interface StrategyClass {
+	public static final StrategyClass[] ALL = new StrategyClass[] {
 		BaseStrategies.BRANCH_BOUND,
 		BaseStrategies.BRANCH_BOUND_CLASS,
 		BaseStrategies.GENETIC,
@@ -17,7 +17,7 @@ public interface Strategies {
 		TourGenerationStrategies.WORST_FIRST,
 	};
 	
-	public static final Strategies DEFAULT = BaseStrategies.GENETIC;
+	public static final StrategyClass DEFAULT = BaseStrategies.SIMULATED_ANNEALING;
 	
 	public Class<? extends Strategy> getStrategyClass();
 }

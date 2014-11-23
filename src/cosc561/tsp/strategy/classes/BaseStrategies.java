@@ -9,7 +9,7 @@ import cosc561.tsp.strategy.SimulatedAnnealing;
 import cosc561.tsp.strategy.Strategy;
 import cosc561.tsp.strategy.UniformCost;
 
-enum BaseStrategies implements Strategies {
+enum BaseStrategies implements StrategyClass {
 	BRANCH_BOUND (
 			"Branch and Bound",
 			BranchAndBoundPath.class),

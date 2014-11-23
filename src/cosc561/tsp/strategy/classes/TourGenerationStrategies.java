@@ -1,12 +1,12 @@
 package cosc561.tsp.strategy.classes;
 
 import cosc561.tsp.strategy.Strategy;
-import cosc561.tsp.strategy.tour_generation.ConvexHull;
-import cosc561.tsp.strategy.tour_generation.Greedy;
-import cosc561.tsp.strategy.tour_generation.RandomPath;
-import cosc561.tsp.strategy.tour_generation.WorstFirstInsertion;
+import cosc561.tsp.strategy.p_approx.ConvexHull;
+import cosc561.tsp.strategy.p_approx.Greedy;
+import cosc561.tsp.strategy.p_approx.RandomPath;
+import cosc561.tsp.strategy.p_approx.WorstFirstInsertion;
 
-public enum TourGenerationStrategies implements Strategies {
+public enum TourGenerationStrategies implements StrategyClass {
 	CONVEX_HULL (
 			"ConvexHull",
 			ConvexHull.class),

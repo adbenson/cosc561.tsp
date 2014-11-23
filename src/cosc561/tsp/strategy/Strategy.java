@@ -11,8 +11,8 @@ import javax.swing.SwingUtilities;
 import cosc561.tsp.TravellingSalesman;
 import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.branch.RichBranch;
-import cosc561.tsp.strategy.classes.Strategies;
-import cosc561.tsp.strategy.tour_generation.TourGenerator;
+import cosc561.tsp.strategy.classes.StrategyClass;
+import cosc561.tsp.strategy.p_approx.TourGenerator;
 import cosc561.tsp.view.MapWindow;
 
 public abstract class Strategy {
@@ -48,7 +48,7 @@ public abstract class Strategy {
 		
 	public abstract RichBranch getSolution();
 		
-	public static Strategy instantiate(Strategies strategyClass, Graph graph, MapWindow window) throws StrategyInstantiationException {
+	public static Strategy instantiate(StrategyClass strategyClass, Graph graph, MapWindow window) throws StrategyInstantiationException {
 		try {
 			Constructor<? extends Strategy> constructor = strategyClass.getStrategyClass().getConstructor(Graph.class, MapWindow.class);
 			return constructor.newInstance(graph, window);
@@ -58,7 +58,7 @@ public abstract class Strategy {
 
 	}
 	
-	public RichBranch generate(Strategies strategy) throws Exception {
+	public RichBranch generate(StrategyClass strategy) throws Exception {
 		Strategy generator = instantiate(strategy, graph, null);
 		return generator.generate();
 	}

@@ -6,7 +6,7 @@ import java.util.Queue;
 import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.branch.RichBranch;
 import cosc561.tsp.model.branch.SparseBranch;
-import cosc561.tsp.strategy.tour_generation.WorstFirstInsertion;
+import cosc561.tsp.strategy.p_approx.WorstFirstInsertion;
 import cosc561.tsp.view.MapWindow;
 
 public class BranchAndBoundPermutation extends Strategy {
