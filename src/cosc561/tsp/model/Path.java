@@ -343,12 +343,16 @@ public class Path implements List<Node> {
 	public List<Node> subList(int fromIndex, int toIndex) {
 		return new Path(path.subList(fromIndex, toIndex));
 	}
+	
+	public Path subPath(int fromIndex, int toIndex) {
+		return new Path(path.subList(fromIndex, toIndex));
+	}
 
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		for (Node n : this) {
-			sb.append(n.id + ", ");
+			sb.append(n + ", ");
 		}
 		
 		return sb.toString();
