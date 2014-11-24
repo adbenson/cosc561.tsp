@@ -25,12 +25,16 @@ public class Node {
 	}
 	
 	public boolean equals(Object other) {
-		if (!(other instanceof Node)) {
+		if (this == other) {
+			return true;
+		}
+		else if (!(other instanceof Node)) {
 			return false;
 		}
-		
-		Node that = (Node)other;
-		return (this.x == that.x && this.y == that.y);
+		else {
+			Node that = (Node)other;
+			return (this.id == that.id);
+		}
 	}
 	
 	public float distance(Node that) {
