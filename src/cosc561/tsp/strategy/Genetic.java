@@ -111,7 +111,7 @@ public class Genetic extends Strategy {
 		
 		//Any way we split it, one half of the path will be better preserved than the other.
 		//So let's make sure we don't give preference to any particular half.
-		if (true){//rand.nextBoolean()) {
+		if (rand.nextBoolean()) {
 			left = left.subPath(0, pivot);
 			right.removeAll(left);
 		}
