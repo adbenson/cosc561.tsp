@@ -34,12 +34,10 @@ public class Genetic extends Strategy {
 		for (int i = 0; i < POPULATION_SIZE; i++) {
 			RichBranch child = generate(TourGenerationStrategies.RANDOM);
 			population.add(child);
-			
-			if (best == null || child.weight < best.weight) {
-				best = child;
-			}
 		}
 		
+		Collections.sort(population);
+		best = population.get(0);
 		rand = new Random();
 	}
 
@@ -48,7 +46,6 @@ public class Genetic extends Strategy {
 		double total = totalPopulationWeight();
 		
 		List<RichBranch> next = new ArrayList<>(POPULATION_SIZE);
-		RichBranch bestChild = null; 
 		
 		for (int i = 0; i < POPULATION_SIZE; i++) {
 			RichBranch p1 = choose(total);
@@ -56,16 +53,16 @@ public class Genetic extends Strategy {
 			
 			RichBranch child = reproduce(p1, p2);
 			next.add(child);
-			
-			if (bestChild == null || child.weight < bestChild.weight) {
-				bestChild = child;
-			}
 		}
 		
-		if (best == null || bestChild.weight < best.weight) {
+		Collections.sort(next);
+		RichBranch bestChild = next.get(0);
+		
+		if (bestChild.weight < best.weight) {
 			best = bestChild;
 		}
 		
+		population = next;
 		return bestChild;
 	}
 
