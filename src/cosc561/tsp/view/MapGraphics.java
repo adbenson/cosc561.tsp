@@ -88,7 +88,8 @@ public class MapGraphics {
 		int x2 = ((int) (n2.x * scale));
 		int y2 = ((int) ((TravellingSalesman.MAX_COORDS-n2.y) * scale));
 		
-		g.setColor(Color.getHSBColor(rand.nextFloat(), 1f, 0.75f));
+		float color = ((n1.x + n2.x + n1.y + n2.y) % 100) / 100.0f;
+		g.setColor(Color.getHSBColor(color, 1f, 0.75f));
 		g.drawLine(x1, y1, x2, y2);
 	}
 	
