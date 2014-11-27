@@ -1,8 +1,13 @@
 package cosc561.tsp.strategy;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
+import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -12,7 +17,6 @@ import cosc561.tsp.TravellingSalesman;
 import cosc561.tsp.model.Graph;
 import cosc561.tsp.model.branch.RichBranch;
 import cosc561.tsp.strategy.classes.StrategyClass;
-import cosc561.tsp.strategy.p_approx.TourGenerator;
 import cosc561.tsp.view.MapWindow;
 
 public abstract class Strategy {
@@ -26,7 +30,11 @@ public abstract class Strategy {
 	protected Strategy(Graph graph, MapWindow window) {
 		this.graph = graph;
 				
-		stats = new Stats(window);
+		try {
+			stats = new Stats(window);
+		} catch (IOException e) {
+			throw new RuntimeException("Exception opening log file. Logging may not work as expected.", e);
+		}
 		
 		reset();
 	}
@@ -104,20 +112,55 @@ public abstract class Strategy {
 	
 	public class Stats {
 		
-		private Map<String, String> outputs;
-		private MapWindow window;
+		private static final String LOGFILE_NAME = "tsp.";
 		
-		public Stats(MapWindow window) {
-			outputs = new HashMap<String, String>();
+		private Map<String, String> outputs;
+		private boolean labelsCurrent;
+		
+		private MapWindow window;
+		private PrintWriter logWriter;
+		
+		public Stats(MapWindow window) throws IOException {
+			outputs = new LinkedHashMap<String, String>();
 			this.window = window;
+			labelsCurrent = false;
+			
+			String filename = LOGFILE_NAME + this.getClass().getSimpleName() + System.currentTimeMillis() + ".log";
+			logWriter = new PrintWriter(new BufferedWriter(new FileWriter(filename, true)), true);
 		}
 		
+		void writeLog() {
+			if (!labelsCurrent) {
+				logWriter.println(buildLog(outputs.keySet()));
+				labelsCurrent = true;
+			}
+
+			logWriter.println(buildLog(outputs.values()));
+		}
+		
+		private String buildLog(Collection<String> values) {
+			StringBuilder log = new StringBuilder();
+
+			for (String value : values) {
+				log.append(value + "|");
+			}
+			
+			return log.toString();
+		}
+		
+		public void closeLog() {
+			logWriter.close();
+		}
+
 		//Handles all numeric types
 		public void output(String label, double value) {
 			output(label, MapWindow.DECIMAL_FORMAT.format(value));
 		}
 
 		public void output(String label, String value) {
+			if (!outputs.containsKey(label)) {
+				labelsCurrent = false;
+			}
 			outputs.put(label, value);
 		}
 		
@@ -138,6 +181,7 @@ public abstract class Strategy {
 				windowOutput();
 			}
 
+			writeLog();
 		}
 
 		private void windowOutput() {
