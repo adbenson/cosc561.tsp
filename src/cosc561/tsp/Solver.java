@@ -184,4 +184,9 @@ public class Solver extends Controls {
 		this.showBest = best;
 	}
 
+	@Override
+	public void saveScreenshot() {
+		strategy.stats.saveScreenshot();
+	}
+
 }

@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.util.Random;
 
 import cosc561.tsp.TravellingSalesman;
@@ -49,6 +50,29 @@ public class MapGraphics {
 		g.setColor(Color.WHITE);
 		g.fillRect (0, 0, panel.getWidth(), panel.getHeight());
 	}
+
+	public void initDraw(BufferedImage img) {
+		if (img == null) {
+			initDraw();
+			return;
+		}
+		
+		offScreenBuffer = img;
+		if (offScreenBuffer == null) {
+			System.err.println("offScreenBuffer is null");
+			return;
+		}
+		else {
+			g = (Graphics2D) offScreenBuffer.getGraphics();
+		}
+		
+		g.setRenderingHint(
+				RenderingHints.KEY_ANTIALIASING, 
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		
+		g.setColor(Color.WHITE);
+		g.fillRect (0, 0, panel.getWidth(), panel.getHeight());
+	}
 	
 	public void display() {
 	    Graphics graphics = null;
@@ -58,7 +82,30 @@ public class MapGraphics {
 				graphics.drawImage(offScreenBuffer, 0, 0, null);
 			}
 		} catch (Exception e) {
-			System.out.println("Graphics context error: " + e);  
+			System.err.println("Graphics context error: " + e); 
+			e.printStackTrace();
+		} finally {
+			if (graphics != null) {
+				graphics.dispose();
+			}
+		}
+	}
+	
+	public void display(BufferedImage img) {
+		if (img == null) {
+			display();
+			return;
+		}
+		
+	    Graphics graphics = null;
+		try {
+			graphics = img.getGraphics();
+			if ((graphics != null) && (offScreenBuffer != null)) {
+				graphics.drawImage(offScreenBuffer, 0, 0, null);
+			}
+		} catch (Exception e) {
+			System.err.println("Graphics context error: " + e);
+			e.printStackTrace();
 		} finally {
 			if (graphics != null) {
 				graphics.dispose();

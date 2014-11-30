@@ -1,6 +1,8 @@
 package cosc561.tsp.strategy;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,6 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
 
 import cosc561.tsp.TravellingSalesman;
@@ -207,5 +210,19 @@ public abstract class Strategy {
 				System.out.println(entry.getKey() +": \t\t"+ entry.getValue());
 			}
 		}
+		
+		public void saveScreenshot() {
+
+			BufferedImage img = window.getScreenShot();
+
+			try {
+				ImageIO.write(img, "png", new File(getFilename() + ".png"));
+			} catch (IOException e) {
+				System.err.println("Exception writing screenshot to disk.");
+				System.err.println(e);
+				e.printStackTrace();
+			}
+		}
+		
 	}
 }

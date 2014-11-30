@@ -2,9 +2,12 @@ package cosc561.tsp.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.image.BufferedImage;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.util.concurrent.TimeUnit;
@@ -146,13 +149,17 @@ public class MapWindow {
 			graphics.drawNode(node);
 		}
 	}
-
+	
 	public void render(RichBranch branch) {
+		render(branch, null);
+	}
+
+	public void render(RichBranch branch, BufferedImage img) {
 		Path tour = branch.getTour();
 
 		nodeList.setText(tour.toString());
 		
-		graphics.initDraw();
+		graphics.initDraw(img);
 		
 		Node prev = null;
 		for (Node next : tour) {
@@ -165,7 +172,8 @@ public class MapWindow {
 		drawNodes(tour);
 		drawNodes(branch.getUnvisited());
 		
-		graphics.display();
+		graphics.display(img);
+		
 		lastRendered = branch;
 	}
 
@@ -182,6 +190,20 @@ public class MapWindow {
 
 	}
 	
+	public BufferedImage getScreenShot() {
+		Component component = window.getContentPane();
+		
+		BufferedImage image = new BufferedImage(
+				graphPanel.getWidth(),
+				graphPanel.getHeight(), 
+				BufferedImage.TYPE_INT_RGB);
+		
+		// call the Component's paint method, using
+		// the Graphics object of the image.
+		render(lastRendered, image); // alternately use .printAll(..)
+		return image;
+	}
+
 	/*
 	 * Thanks to Jarrod Roberson
 	 * http://stackoverflow.com/questions/6710094/how-to-format-an-elapsed-time-interval-in-hhmmss-sss-format-in-java

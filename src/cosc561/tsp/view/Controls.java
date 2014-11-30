@@ -35,6 +35,8 @@ public abstract class Controls {
 	public abstract void setShowBest(boolean best);
 
 	public abstract void changeStrategy(StrategyClass strategy);
+	
+	public abstract void saveScreenshot();
 
 	private ControlPanel panel;
 
@@ -77,6 +79,10 @@ public abstract class Controls {
 			add(render);
 			render.setSelected(true);
 			render.addItemListener(renderToggle());
+			
+			JButton capture = new JButton("Capture");
+			add(capture);
+			capture.setAction(captureButton());
 
 			pause = new JToggleButton("Pause");
 			add(pause);
@@ -135,6 +141,19 @@ public abstract class Controls {
 					new Thread(new Runnable() {
 						public void run() {
 							next(true);
+						}
+					}).start();
+				}
+			};
+		};
+		
+		@SuppressWarnings("serial")
+		public final Action captureButton() {
+			return new AbstractAction("Capture") {
+				public void actionPerformed(ActionEvent event) {
+					new Thread(new Runnable() {
+						public void run() {
+							saveScreenshot();
 						}
 					}).start();
 				}
