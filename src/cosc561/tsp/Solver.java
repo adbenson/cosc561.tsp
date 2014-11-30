@@ -107,6 +107,9 @@ public class Solver extends Controls {
 		window.render(currentBranch);
 		updateStats();
 		
+		strategy.stats.writeLogLine("Best Distance: "+currentBranch.weight);
+		strategy.stats.writeLogLine("Best Path: "+currentBranch.getTour().toString());
+		
 		System.out.println("Done!");
 		System.out.println("Distance: "+currentBranch.weight);
 		System.out.println("Path: "+currentBranch.getTour());
