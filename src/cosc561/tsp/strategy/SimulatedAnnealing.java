@@ -13,13 +13,75 @@ import cosc561.tsp.view.MapWindow;
 
 public class SimulatedAnnealing extends Strategy {
 	
-	private static final long MAX_ITERATIONS = 1000000000;
-	private static final double MIN_TEMP = 0.001;
-
-	private Random rand;
+	/**
+	 * STATIC
+	 */
 	
-	private double coolingRate = 0.995;
-	private int coolingSchedule = 2000000; 
+	/* Arbitrary constants */
+	private static final long EXPECTED_RUN_TIME_SECONDS = (long) (12 * 60 * 60);
+	
+	private static final int ITERATIONS_PER_SECOND = 33000;	
+	
+	private static final int STEPS = 1000;
+	
+	private static final double START_TEMP = 100;
+	
+	private static final double ACCEPTABLE_REGRESSION_DIFFERENCE = 1.0;
+
+	/* Calculated constants */
+	private static final int COOLING_INTERVAL = getCoolingInterval(EXPECTED_RUN_TIME_SECONDS, ITERATIONS_PER_SECOND, STEPS);
+	private static final double MIN_TEMP = getMinTemp(ACCEPTABLE_REGRESSION_DIFFERENCE, COOLING_INTERVAL);
+	private static final double COOLING_RATE = getCoolingRate(STEPS, START_TEMP, MIN_TEMP);
+	
+	/**
+	 * Returns the number of iterations between steps required to achieve the desired run time.
+	 * 
+	 * @param runTime
+	 * @param iterationRate
+	 * @param steps
+	 * @return
+	 */
+	private static int getCoolingInterval(long runTime, int iterationRate, int steps) {
+		long expectedIterations = runTime * iterationRate;
+		return (int) (expectedIterations / steps);
+	}
+	
+	/**
+	 * This will return a temperature where the probability of a solution that is 
+	 * {@code acceptableRegressionDifference} worse than the current best solution 
+	 * is likely to be accepted once within {@code iterationsPerStep} iterations.
+	 *  
+	 * @param acceptableRegressionDifference
+	 * @param iterationsPerStep
+	 * @return
+	 */
+	private static double getMinTemp(double acceptableRegressionDifference, int iterationsPerStep) {
+		 return acceptableRegressionDifference / Math.log(iterationsPerStep);
+	}
+	
+	/**
+	 * Returns the cooling rate which, when applied {@code steps - 1} times, will result in {@code minTemp}
+	 * 
+	 * @param steps
+	 * @param startTemp
+	 * @param minTemp
+	 * @return
+	 */
+	private static double getCoolingRate(int steps, double startTemp, double minTemp) {		
+		
+		double tempRatio = minTemp / startTemp;
+		
+		long lastStep = steps - 1;
+		
+		return Math.pow(tempRatio, (1.0 / lastStep));
+	}
+	
+	/**
+	 * INSTANCE
+	 */
+	
+	/* Member variables */
+	private Random rand;
 	
 	private double temperature;
 		
@@ -37,10 +99,14 @@ public class SimulatedAnnealing extends Strategy {
 	@Override
 	public void init() throws Exception {
 		best = current = generate(TourGenerationStrategies.RANDOM);
-		temperature = 1.0;
+		temperature = START_TEMP;
 		
 		improvements = 0;
 		acceptedRegressions = 0;
+		
+		stats.writeLogLine("Cooling Interval: "+COOLING_INTERVAL);
+		stats.writeLogLine("Cooling Rate: "+COOLING_RATE);
+		stats.writeLogLine("Min Temp.: "+MIN_TEMP);
 	}
 
 	@Override
@@ -71,8 +137,8 @@ public class SimulatedAnnealing extends Strategy {
 	}
 
 	private void cool() {
-		if (getIteration() % coolingSchedule == 0) {
-			temperature *= coolingRate;
+		if (getIteration() % COOLING_INTERVAL == 0) {
+			temperature *= COOLING_RATE;
 		}
 	}
 	
