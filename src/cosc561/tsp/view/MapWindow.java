@@ -44,6 +44,8 @@ public class MapWindow {
 	private JTextArea nodeList;
 	private Container content;
 	
+	private RichBranch lastRendered;
+	
 	public MapWindow(Dimension dimensions) {
 		
 		window = new JFrame();
@@ -54,7 +56,7 @@ public class MapWindow {
 		
 		JPanel graphContainer = new JPanel(new BorderLayout());
 		
-		graphPanel = new JPanel();
+		graphPanel = new GraphPanel();
 		graphPanel.setPreferredSize(dimensions);
 		graphContainer.add(graphPanel, BorderLayout.CENTER);
 		
@@ -164,6 +166,7 @@ public class MapWindow {
 		drawNodes(branch.getUnvisited());
 		
 		graphics.display();
+		lastRendered = branch;
 	}
 
 	public void reset() {
@@ -190,6 +193,20 @@ public class MapWindow {
         final long ms = TimeUnit.MILLISECONDS.toMillis(l - TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min) - TimeUnit.SECONDS.toMillis(sec));
         return String.format("%02d:%02d:%02d.%03d", hr, min, sec, ms);
     }
+	
+	@SuppressWarnings("serial")
+	private class GraphPanel extends JPanel {
+		public void paint(Graphics g) {
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					if (lastRendered != null) {
+						render(lastRendered);
+					}
+				}
+			});
+		}
+	}
+
 
 }
 
