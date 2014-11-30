@@ -1,5 +1,6 @@
 package cosc561.tsp.model.branch;
 
+import java.util.Arrays;
 import java.util.Comparator;
 
 import cosc561.tsp.model.Graph;
@@ -164,6 +165,20 @@ public class SparseBranch implements Comparable<SparseBranch>, Partitionable {
 		}
 		
 		return weight;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		else if (!(o instanceof SparseBranch)) {
+			return false;
+		}
+		else {
+			SparseBranch that = (SparseBranch)o;
+			return Arrays.equals(this.path, that.path);
+		}
 	}
 	
 	@Override

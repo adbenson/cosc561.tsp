@@ -4,7 +4,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Set;
 
-public class Node {
+public class Node implements Comparable<Node> {
 	
 	private static int lastId = 0;
 
@@ -80,5 +80,19 @@ public class Node {
 	
 	public String toString() {
 		return id+":"+x+","+y+"";
+	}
+
+	@Override
+	public int compareTo(Node o) {
+		int xd = this.x - o.x;
+		if (xd == 0) {
+			return this.y - o.y;
+		}
+		return xd;
+	}
+	
+	@Override
+	public int hashCode() {
+		return id;
 	}
 }
