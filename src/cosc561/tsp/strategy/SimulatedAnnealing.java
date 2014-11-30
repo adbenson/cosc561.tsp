@@ -3,12 +3,9 @@ package cosc561.tsp.strategy;
 import java.util.Random;
 
 import cosc561.tsp.model.Graph;
-import cosc561.tsp.model.Node;
 import cosc561.tsp.model.Path;
 import cosc561.tsp.model.branch.RichBranch;
 import cosc561.tsp.strategy.classes.TourGenerationStrategies;
-import cosc561.tsp.strategy.p_approx.RandomPath;
-import cosc561.tsp.strategy.p_approx.TourGenerator;
 import cosc561.tsp.view.MapWindow;
 
 public class SimulatedAnnealing extends Strategy {

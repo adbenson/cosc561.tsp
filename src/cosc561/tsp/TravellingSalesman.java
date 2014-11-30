@@ -6,15 +6,6 @@ import javax.swing.SwingUtilities;
 
 import cosc561.tsp.model.NodeParser;
 import cosc561.tsp.model.Path;
-import cosc561.tsp.strategy.BranchAndBoundClassHeuristic;
-import cosc561.tsp.strategy.BranchAndBoundPath;
-import cosc561.tsp.strategy.BreadthFirstClassHeuristic;
-import cosc561.tsp.strategy.BreadthFirstSearch;
-import cosc561.tsp.strategy.SimulatedAnnealing;
-import cosc561.tsp.strategy.Strategy;
-import cosc561.tsp.strategy.p_approx.Greedy;
-import cosc561.tsp.strategy.p_approx.TwoOpt;
-import cosc561.tsp.strategy.p_approx.WorstFirstInsertion;
 import cosc561.tsp.view.MapWindow;
 
 public class TravellingSalesman {
