@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -28,7 +29,7 @@ import cosc561.tsp.model.Path;
 import cosc561.tsp.model.branch.RichBranch;
 
 public class MapWindow {
-	
+
 	public static final Color BACKGROUND = Color.WHITE;
 	
 	public static final int OUTPUT_WIDTH = 300;
@@ -188,6 +189,20 @@ public class MapWindow {
 			}
 		});
 
+	}
+	
+	public String requestDescription() {
+		String description = (String) JOptionPane.showInputDialog(
+				window,
+				"Please enter a description for this run:",
+				"Execution description", 
+				JOptionPane.QUESTION_MESSAGE);
+
+		if ((description == null) || (description.trim().length() == 0)) {
+			return "";
+		}
+
+		return description;
 	}
 	
 	public BufferedImage getScreenShot() {

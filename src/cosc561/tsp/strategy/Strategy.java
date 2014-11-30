@@ -33,11 +33,7 @@ public abstract class Strategy {
 	protected Strategy(Graph graph, MapWindow window) {
 		this.graph = graph;
 				
-		try {
-			stats = new Stats(window);
-		} catch (IOException e) {
-			throw new RuntimeException("Exception opening log file. Logging may not work as expected.", e);
-		}
+		stats = new Stats(window);
 		
 		reset();
 	}
@@ -115,7 +111,9 @@ public abstract class Strategy {
 	
 	public class Stats {
 		
-		private static final String LOGFILE_NAME = "tsp.";
+		private static final String LOGFILE_FOLDER = "log";
+		private static final String LOGFILE_PREFIX = "tsp-";
+		private static final String LOGFILE_EXTENSION = ".log";
 		
 		private Map<String, String> outputs;
 		private boolean labelsCurrent;
@@ -123,22 +121,62 @@ public abstract class Strategy {
 		private MapWindow window;
 		private PrintWriter logWriter;
 		
-		public Stats(MapWindow window) throws IOException {
+		private String filename;
+		
+		private String description;
+		
+		public Stats(MapWindow window) {
 			outputs = new LinkedHashMap<String, String>();
 			this.window = window;
 			labelsCurrent = false;
 			
-			String filename = LOGFILE_NAME + this.getClass().getSimpleName() + System.currentTimeMillis() + ".log";
-			logWriter = new PrintWriter(new BufferedWriter(new FileWriter(filename, true)), true);
+			if (window != null) {
+				description = cleanseDescription(window.requestDescription());
+				output("Description", description);
+			}
+			
+			filename = getFilename() + LOGFILE_EXTENSION;
 		}
 		
-		void writeLog() {
+		private String cleanseDescription(String desc) {
+			desc = desc.replaceAll("\\s", "_");
+			desc = desc.replaceAll("[^A-Za-z0-9_\\-\\.]", "-");
+			return desc;
+		}
+
+		private String getFilename() {
+			return LOGFILE_FOLDER + File.separator + 
+					LOGFILE_PREFIX + Strategy.this.getClass().getSimpleName() + 
+					"-" + description + 
+					"-" + System.currentTimeMillis();
+		}
+		
+		private PrintWriter getLogWriter() throws IOException {
+			if (logWriter == null) {
+				logWriter = new PrintWriter(new BufferedWriter(new FileWriter(filename, true)), true);
+			}
+			
+			return logWriter;
+		}
+		
+		public void writeLogLine(String log) {
+			PrintWriter writer;
+			try {
+				writer = getLogWriter();
+			} catch (IOException e) {
+				throw new RuntimeException("Exception opening log file for write : "+filename, e);
+			}
+			
+			writer.println(log);
+		}
+		
+		private void writeLog() {
 			if (!labelsCurrent) {
-				logWriter.println(buildLog(outputs.keySet()));
+				writeLogLine(buildLog(outputs.keySet()));
 				labelsCurrent = true;
 			}
 
-			logWriter.println(buildLog(outputs.values()));
+			writeLogLine(buildLog(outputs.values()));
 		}
 		
 		private String buildLog(Collection<String> values) {
@@ -149,10 +187,6 @@ public abstract class Strategy {
 			}
 			
 			return log.toString();
-		}
-		
-		public void closeLog() {
-			logWriter.close();
 		}
 
 		//Handles all numeric types
