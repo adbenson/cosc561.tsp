@@ -28,7 +28,7 @@ public class TravellingSalesman {
 	public static final int FPS = 2;
 	public static final int TOLERANCE = 10;
 	
-	public static final int DEFAULT_NODES = 8;
+	public static final int DEFAULT_NODES = 120;
 	public static final int MAX_NODES = 120;
 	
 	private MapWindow window;
