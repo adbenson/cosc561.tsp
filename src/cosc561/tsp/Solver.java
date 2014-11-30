@@ -118,6 +118,7 @@ public class Solver extends Controls {
 		if (strategy != null) {
 			String runTime = MapWindow.formatTimeInterval(scheduler.getContinuousRunTime());
 			strategy.stats.output("Running Time", runTime);
+			strategy.stats.output("Attempts / Sec.", strategy.getIteration() / (scheduler.getContinuousRunTime() / 1000.0));
 			strategy.stats.show();
 		}
 	}
