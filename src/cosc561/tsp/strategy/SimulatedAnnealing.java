@@ -66,7 +66,7 @@ public class SimulatedAnnealing extends Strategy {
 	}
 
 	private static double merit(float current, float best, double temperature) {
-		double exp = (best - current) / temperature; 
+		double exp = -((current - best) / temperature); 
 		return Math.pow(Math.E, exp);
 	}
 
